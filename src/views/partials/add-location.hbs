@@ -1,0 +1,21 @@
+<form action="/dashboard/addlocation" method="POST">
+  <div class="columns">
+    <div class="column is-full-mobile is-one-third-tablet is-one-third-desktop">
+      <label class="label">Location Title</label>
+      <input class="input" type="text" placeholder="Enter location title" name="title" />
+    </div>
+    <div class="column is-full-mobile is-one-third-tablet is-one-third-desktop">
+      <label class="label">Location Latitude</label>
+      <input class="input" type="number" step="0.000001" placeholder="Enter location latitude" name="latitude" />
+    </div>
+    <div class="column is-full-mobile is-one-third-tablet is-one-third-desktop">
+      <label class="label">Location Longitude</label>
+      <input class="input" type="number" step="0.000001" placeholder="Enter location longitude" name="longitude" />
+    </div>
+  </div>
+  <div class="field" style="margin-bottom: 24px;">
+    <label class="label">Location Description</label>
+    <input class="input" type="text" placeholder="Enter location description" name="description" />
+  </div>
+  <button class="button is-link">Add Location</button>
+</form>
