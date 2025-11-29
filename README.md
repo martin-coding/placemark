@@ -21,6 +21,7 @@ This application allows users to save and manage points of interest (POIs) by ad
 git clone https://github.com/martin-coding/placemark.git
 cd placemark
 ```
+
 2. Install dependencies
 
 ```bash
