@@ -17,9 +17,9 @@ export const locationJsonStore = {
 
   async getLocationById(id) {
     await db.read();
-    let location = db.data.locations.find((location) => location._id === id);
-    if (location === undefined) location = null;
-    return location;
+    let poi = db.data.locations.find((location) => location._id === id);
+    if (poi === undefined) poi = null;
+    return poi;
   },
 
   async getUserLocations(userid) {
