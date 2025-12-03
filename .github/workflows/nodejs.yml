@@ -6,10 +6,6 @@ on:
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
-    env:
-      PORT: 3000
-      HOSTNAME: localhost
-      COOKIE_NAME: placemark
     steps:
       - name: Checkout Repository
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
@@ -20,10 +16,14 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm install
+      - name: Set up environment variables
+        run: |
+          echo "COOKIE_NAME=placemark" >> .env
+          echo "COOKIE_PASSWORD=${{ secrets.COOKIE_PASSWORD }}" >> .env
+          echo "HOSTNAME=localhost" >> .env
+          echo "PORT=3000" >> .env
       - name: Run lint
         run: npm run lint
-      - name: Set up environment variables
-        run: echo "COOKIE_PASSWORD=${{ secrets.COOKIE_PASSWORD }}" >> $GITHUB_ENV
       - name: Start the app
         run: |
           nohup npm run start &  # Replace with the appropriate command for your app
