@@ -1,0 +1,42 @@
+name: test & lint
+
+on:
+  push:
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - name: Set up Node.js
+        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        with:
+          node-version: 25
+          cache: "npm"
+      - name: Install dependencies
+        run: npm install
+      - name: Set up environment variables
+        run: |
+          echo "COOKIE_NAME=placemark" >> .env
+          echo "COOKIE_PASSWORD=${{ secrets.COOKIE_PASSWORD }}" >> .env
+          echo "HOSTNAME=localhost" >> .env
+          echo "PORT=3000" >> .env
+      - name: Run lint
+        run: npm run lint
+      - name: Start the app
+        run: nohup npm run start &
+      - name: Wait for app
+        run: |
+          for i in {1..30}; do
+            if nc -z localhost 3000; then
+              echo "App is up!"
+              exit 0
+            fi
+            echo "Waiting..."
+            sleep 1
+          done
+          echo "App failed to start"
+          exit 1
+      - name: Run tests
+        run: npm run test
