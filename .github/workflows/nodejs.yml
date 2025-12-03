@@ -13,7 +13,7 @@ jobs:
         uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
           node-version: 25
-          cache: 'npm'
+          cache: "npm"
       - name: Install dependencies
         run: npm install
       - name: Set up environment variables
@@ -35,4 +35,4 @@ jobs:
         run: |
           ./wait-for-it.sh localhost:3000 --timeout=30 --strict -- echo "App is up and running!"
       - name: Run tests
-        run: npm run tests
+        run: npm run test
