@@ -1,6 +1,6 @@
 import { assert } from "chai";
-import { db } from "../src/models/db.js";
-import { testLocations, waterfall } from "./fixtures.js";
+import { db } from "../../src/models/db.js";
+import { testLocations, waterfall } from "../fixtures.js";
 
 suite("Location Model tests", () => {
   setup(async () => {
@@ -46,7 +46,7 @@ suite("Location Model tests", () => {
     assert.isNull(await db.locationStore.getLocationById());
   });
 
-  test("delete one Location - fail", async () => {
+  test("delete one location - fail", async () => {
     await db.locationStore.deleteLocationById("bad-id");
     const allLocations = await db.locationStore.getAllLocations();
     assert.equal(testLocations.length, allLocations.length);

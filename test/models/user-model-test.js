@@ -1,6 +1,6 @@
 import { assert } from "chai";
-import { db } from "../src/models/db.js";
-import { john, testUsers } from "./fixtures.js";
+import { db } from "../../src/models/db.js";
+import { john, testUsers } from "../fixtures.js";
 
 suite("User Model tests", () => {
   setup(async () => {

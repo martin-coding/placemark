@@ -9,6 +9,7 @@ import { fileURLToPath } from "url";
 import { accountsController } from "./controllers/accounts-controller.js";
 import { webRoutes } from "./web-routes.js";
 import { db } from "./models/db.js";
+import { apiRoutes } from "./api-routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,7 +23,7 @@ if (result.error) {
 async function init() {
   const server = Hapi.server({
     port: process.env.port,
-    host: "localhost",
+    host: process.env.hostname,
   });
   await server.register(Vision);
   await server.register(Cookie);
@@ -50,6 +51,7 @@ async function init() {
   server.auth.default("session");
   db.init();
   server.route(webRoutes);
+  server.route(apiRoutes);
   await server.start();
   console.log("Server running on %s", server.info.uri);
 }
