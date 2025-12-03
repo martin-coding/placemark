@@ -22,8 +22,8 @@ if (result.error) {
 
 async function init() {
   const server = Hapi.server({
-    port: process.env.port,
-    host: process.env.hostname,
+    port: process.env.PORT,
+    host: process.env.HOSTNAME,
   });
   await server.register(Vision);
   await server.register(Cookie);
@@ -41,8 +41,8 @@ async function init() {
   });
   server.auth.strategy("session", "cookie", {
     cookie: {
-      name: process.env.cookie_name,
-      password: process.env.cookie_password,
+      name: process.env.COOKIE_NAME,
+      password: process.env.COOKIE_PASSWORD,
       isSecure: false,
     },
     redirectTo: "/",
