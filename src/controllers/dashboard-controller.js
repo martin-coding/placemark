@@ -41,7 +41,7 @@ export const dashboardController = {
   deleteLocation: {
     handler: async function (request, h) {
       const location = await db.locationStore.getLocationById(request.params.id);
-      if (location.userid !== request.auth.credentials._id) {
+      if (!location.userid.equals(request.auth.credentials._id)) { // Now JSON model won't work
         return h.response("403 Forbidden").code(403);
       }
       await db.locationStore.deleteLocationById(location._id);
