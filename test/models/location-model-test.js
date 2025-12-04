@@ -1,10 +1,11 @@
 import { assert } from "chai";
 import { db } from "../../src/models/db.js";
 import { testLocations, waterfall } from "../fixtures.js";
+import { assertSubset } from "../test-utils.js";
 
 suite("Location Model tests", () => {
   setup(async () => {
-    db.init();
+    db.init("mongo");
     await db.locationStore.deleteAllLocations();
     for (let i = 0; i < testLocations.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
@@ -14,7 +15,7 @@ suite("Location Model tests", () => {
 
   test("create a location", async () => {
     const location = await db.locationStore.addLocation(waterfall);
-    assert.equal(location, waterfall); // waterfall now also has _id
+    assertSubset(waterfall, location);
     assert.isDefined(location._id);
   });
 
