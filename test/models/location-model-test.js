@@ -1,12 +1,14 @@
 import { assert } from "chai";
+import { EventEmitter } from "events";
 import { before } from "mocha";
 import { db } from "../../src/models/db.js";
 import { testLocations, waterfall } from "../fixtures.js";
 import { assertSubset } from "../test-utils.js";
 
-suite("Location Model tests", () => {
+EventEmitter.setMaxListeners(25);
 
-  before(async function() {
+suite("Location Model tests", () => {
+  before(async function () {
     this.timeout(5000);
     await db.init("mongo");
   });

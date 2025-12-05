@@ -8,8 +8,7 @@ import { assertSubset } from "../test-utils.js";
 EventEmitter.setMaxListeners(25);
 
 suite("User Model tests", () => {
-
-  before(async function() {
+  before(async function () {
     this.timeout(5000);
     await db.init("mongo");
   });
