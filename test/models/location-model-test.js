@@ -2,10 +2,14 @@ import { assert } from "chai";
 import { db } from "../../src/models/db.js";
 import { testLocations, waterfall } from "../fixtures.js";
 import { assertSubset } from "../test-utils.js";
+import { before } from "mocha";
 
 suite("Location Model tests", () => {
+  before(async () => {
+    await db.init("mongo");
+  });
+
   setup(async () => {
-    db.init("mongo");
     await db.locationStore.deleteAllLocations();
     for (let i = 0; i < testLocations.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
