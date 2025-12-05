@@ -22,13 +22,9 @@ jobs:
           echo "COOKIE_PASSWORD=${{ secrets.COOKIE_PASSWORD }}" >> .env
           echo "HOSTNAME=localhost" >> .env
           echo "PORT=3000" >> .env
-          echo "DB=mongodb://localhost/placemark" >> .env
+          echo "DB=${{ secrets.DB_CON_STRING }}" >> .env
       - name: Run lint
         run: npm run lint
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.12.1
-        with:
-          mongodb-version: 8.2
       - name: Start the app
         run: nohup npm run start &
       - name: Wait for app
