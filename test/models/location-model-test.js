@@ -5,6 +5,8 @@ import { testLocations, waterfall } from "../fixtures.js";
 import { assertSubset } from "../test-utils.js";
 
 suite("Location Model tests", () => {
+  this.timeout(5000);
+
   before(async () => {
     await db.init("mongo");
   });
