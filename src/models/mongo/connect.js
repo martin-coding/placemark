@@ -6,11 +6,12 @@ export function connectMongo() {
     dotenv.config();
 
     Mongoose.set("strictQuery", true);
-    
+
     // Check if already connected
     if (Mongoose.connection.readyState === 1) {
       console.log("Database is already connected.");
-      return resolve();
+      resolve();
+      return;
     }
 
     Mongoose.connect(process.env.DB);
