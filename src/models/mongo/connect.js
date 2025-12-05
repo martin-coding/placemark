@@ -2,21 +2,32 @@ import * as dotenv from "dotenv";
 import Mongoose from "mongoose";
 
 export function connectMongo() {
-  dotenv.config();
+  return new Promise((resolve, reject) => {
+    dotenv.config();
 
-  Mongoose.set("strictQuery", true);
-  Mongoose.connect(process.env.DB);
-  const db = Mongoose.connection;
+    Mongoose.set("strictQuery", true);
+    
+    // Check if already connected
+    if (Mongoose.connection.readyState === 1) {
+      console.log("Database is already connected.");
+      return resolve();
+    }
 
-  db.on("error", (err) => {
-    console.log(`database connection error: ${err}`);
-  });
+    Mongoose.connect(process.env.DB);
+    const db = Mongoose.connection;
 
-  db.on("disconnected", () => {
-    console.log("database disconnected");
-  });
+    db.on("error", (err) => {
+      console.log(`database connection error: ${err}`);
+      reject(err);
+    });
 
-  db.once("open", function () {
-    console.log(`database connected to ${this.name} on ${this.host}`);
+    db.on("disconnected", () => {
+      console.log("database disconnected");
+    });
+
+    db.once("open", function () {
+      console.log(`database connected to ${this.name} on ${this.host}`);
+      resolve();
+    });
   });
 }

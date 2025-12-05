@@ -8,12 +8,12 @@ export const db = {
   userStore: null,
   locationStore: null,
 
-  init(storeType) {
+  async init(storeType) {
     switch (storeType) {
       case "mongo":
         this.userStore = userMongoStore;
         this.locationStore = locationMongoStore;
-        connectMongo();
+        await connectMongo();
         break;
       default:
         this.userStore = userJsonStore;
