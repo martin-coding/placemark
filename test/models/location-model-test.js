@@ -1,8 +1,8 @@
 import { assert } from "chai";
+import { before } from "mocha";
 import { db } from "../../src/models/db.js";
 import { testLocations, waterfall } from "../fixtures.js";
 import { assertSubset } from "../test-utils.js";
-import { before } from "mocha";
 
 suite("Location Model tests", () => {
   before(async () => {

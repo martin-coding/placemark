@@ -1,9 +1,9 @@
 import { assert } from "chai";
 import { EventEmitter } from "events";
+import { before } from "mocha";
 import { db } from "../../src/models/db.js";
 import { john, testUsers } from "../fixtures.js";
 import { assertSubset } from "../test-utils.js";
-import { before } from "mocha";
 
 EventEmitter.setMaxListeners(25);
 
