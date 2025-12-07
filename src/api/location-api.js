@@ -58,7 +58,7 @@ export const locationApi = {
     description: "Create a location",
     notes: "Returns the newly created location",
     validate: { payload: LocationSpec, failAction: validationError },
-    response: { schema: LocationSpecPlus, failAction: validationError },
+    response: { status: { 201: LocationSpecPlus }, failAction: validationError },
   },
 
   deleteOne: {
