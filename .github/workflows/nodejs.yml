@@ -6,6 +6,13 @@ on:
 jobs:
   testing:
     runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
@@ -15,7 +22,7 @@ jobs:
           node-version: 25
           cache: "npm"
       - name: Install dependencies
-        run: npm install
+        run: npm install --force
       - name: Set up environment variables
         run: |
           echo "COOKIE_NAME=placemark" >> .env
@@ -25,10 +32,6 @@ jobs:
           echo "DB=mongodb://localhost/placemark" >> .env
       - name: Run lint
         run: npm run lint
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.12.1
-        with:
-          mongodb-version: 8.2
       - name: Start the app
         run: nohup npm run start &
       - name: Wait for app

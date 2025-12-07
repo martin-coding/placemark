@@ -1,5 +1,6 @@
 import { assert } from "chai";
 import { EventEmitter } from "events";
+import { before } from "mocha";
 import { db } from "../../src/models/db.js";
 import { john, testUsers } from "../fixtures.js";
 import { assertSubset } from "../test-utils.js";
@@ -7,8 +8,11 @@ import { assertSubset } from "../test-utils.js";
 EventEmitter.setMaxListeners(25);
 
 suite("User Model tests", () => {
-  setup(async () => {
+  before(async () => {
     db.init("mongo");
+  });
+
+  setup(async () => {
     await db.userStore.deleteAll();
     for (let i = 0; i < testUsers.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
