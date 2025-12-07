@@ -6,6 +6,13 @@ on:
 jobs:
   testing:
     runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
@@ -22,7 +29,7 @@ jobs:
           echo "COOKIE_PASSWORD=${{ secrets.COOKIE_PASSWORD }}" >> .env
           echo "HOSTNAME=localhost" >> .env
           echo "PORT=3000" >> .env
-          echo "DB=${{ secrets.DB_CON_STRING }}" >> .env
+          echo "DB=mongodb://localhost/placemark" >> .env
       - name: Run lint
         run: npm run lint
       - name: Start the app
