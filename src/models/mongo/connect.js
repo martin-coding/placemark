@@ -4,6 +4,12 @@ import Mongoose from "mongoose";
 export function connectMongo() {
   dotenv.config();
 
+  // Check if already connected to avoid redundant connections
+  if (Mongoose.connection.readyState === 1) {
+    console.log("Already connected to the database.");
+    return;
+  }
+
   Mongoose.set("strictQuery", true);
   Mongoose.connect(process.env.DB);
   const db = Mongoose.connection;

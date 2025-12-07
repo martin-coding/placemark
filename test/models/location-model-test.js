@@ -1,11 +1,18 @@
 import { assert } from "chai";
+import { EventEmitter } from "events";
+import { before } from "mocha";
 import { db } from "../../src/models/db.js";
 import { testLocations, waterfall } from "../fixtures.js";
 import { assertSubset } from "../test-utils.js";
 
+EventEmitter.setMaxListeners(25);
+
 suite("Location Model tests", () => {
-  setup(async () => {
+  before(async () => {
     db.init("mongo");
+  });
+
+  setup(async () => {
     await db.locationStore.deleteAllLocations();
     for (let i = 0; i < testLocations.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
