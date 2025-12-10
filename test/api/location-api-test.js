@@ -2,7 +2,7 @@ import { EventEmitter } from "events";
 import { assert } from "chai";
 import { placemarkService } from "./placemark-service.js";
 import { assertSubset } from "../test-utils.js";
-import { john, waterfall, testLocations } from "../fixtures.js";
+import { john, johnCredentials, waterfall, testLocations } from "../fixtures.js";
 
 EventEmitter.setMaxListeners(25);
 
@@ -10,9 +10,13 @@ suite("Location API tests", () => {
   let user = null;
 
   setup(async () => {
+    placemarkService.clearAuth();
+    user = await placemarkService.createUser(john);
+    await placemarkService.authenticate(johnCredentials);
     await placemarkService.deleteAllLocations();
     await placemarkService.deleteAllUsers();
     user = await placemarkService.createUser(john);
+    await placemarkService.authenticate(johnCredentials);
     waterfall.userid = user._id;
   });
 
