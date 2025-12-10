@@ -7,7 +7,9 @@ import dotenv from "dotenv";
 import path from "path";
 import Joi from "joi";
 import HapiSwagger from "hapi-swagger";
+import jwt from "hapi-auth-jwt2";
 import { fileURLToPath } from "url";
+import { validate } from "./api/jwt-utils.js";
 import { accountsController } from "./controllers/accounts-controller.js";
 import { webRoutes } from "./web-routes.js";
 import { db } from "./models/db.js";
@@ -27,6 +29,14 @@ const swaggerOptions = {
     title: "Placemark API",
     version: "0.1",
   },
+  securityDefinitions: {
+    jwt: {
+      type: "apiKey",
+      name: "Authorization",
+      in: "header",
+    },
+  },
+  security: [{ jwt: [] }],
 };
 
 async function init() {
@@ -35,6 +45,7 @@ async function init() {
   });
 
   await server.register(Cookie);
+  await server.register(jwt);
 
   await server.register([
     Inert,
@@ -67,6 +78,11 @@ async function init() {
     },
     redirectTo: "/",
     validate: accountsController.validate,
+  });
+  server.auth.strategy("jwt", "jwt", {
+    key: process.env.COOKIE_PASSWORD,
+    validate: validate,
+    verifyOptions: { algorithms: ["HS256"] },
   });
   server.auth.default("session");
 

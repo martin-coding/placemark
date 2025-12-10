@@ -5,13 +5,15 @@ import { validationError } from "./logger.js";
 
 export const locationApi = {
   find: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request, h) {
       try {
         const locations = await db.locationStore.getAllLocations();
         return locations;
       } catch (err) {
-        return Boom.serverUnavailable("Database Error:", err);
+        return Boom.serverUnavailable("Database Error", err);
       }
     },
     tags: ["api"],
@@ -21,7 +23,9 @@ export const locationApi = {
   },
 
   findOne: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     async handler(request) {
       try {
         const location = await db.locationStore.getLocationById(request.params.id);
@@ -41,7 +45,9 @@ export const locationApi = {
   },
 
   create: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request, h) {
       try {
         const location = request.payload;
@@ -51,7 +57,7 @@ export const locationApi = {
         }
         return Boom.badImplementation("error creating location");
       } catch (err) {
-        return Boom.serverUnavailable("Database Error:", err);
+        return Boom.serverUnavailable("Database Error", err);
       }
     },
     tags: ["api"],
@@ -62,7 +68,9 @@ export const locationApi = {
   },
 
   deleteOne: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request, h) {
       try {
         const location = await db.locationStore.getLocationById(request.params.id);
@@ -81,13 +89,15 @@ export const locationApi = {
   },
 
   deleteAll: {
-    auth: false,
+    auth: {
+      strategy: "jwt",
+    },
     handler: async function (request, h) {
       try {
         await db.locationStore.deleteAllLocations();
         return h.response().code(204);
       } catch (err) {
-        return Boom.serverUnavailable("Database Error:", err);
+        return Boom.serverUnavailable("Database Error", err);
       }
     },
     tags: ["api"],
