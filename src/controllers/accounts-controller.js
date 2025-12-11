@@ -11,7 +11,7 @@ export const accountsController = {
   showSignup: {
     auth: false,
     handler: function (request, h) {
-      return h.view("signup-view", { title: "Sign up for Location" });
+      return h.view("signup-view", { title: "Sign up for Placemark" });
     },
   },
   signup: {
@@ -32,7 +32,7 @@ export const accountsController = {
   showLogin: {
     auth: false,
     handler: function (request, h) {
-      return h.view("login-view", { title: "Login to Location" });
+      return h.view("login-view", { title: "Login to Placemark" });
     },
   },
   login: {
