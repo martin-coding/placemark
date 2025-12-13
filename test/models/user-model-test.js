@@ -50,13 +50,8 @@ suite("User Model tests", () => {
   });
 
   test("get a user - failures", async () => {
-    const noUserWithId = await db.userStore.getUserById("123");
-    assert.isNull(noUserWithId);
-    const noUserWithEmail = await db.userStore.getUserByEmail("no@one.com");
-    assert.isNull(noUserWithEmail);
-  });
-
-  test("get a user - bad params", async () => {
+    assert.isNull(await db.userStore.getUserById("123"));
+    assert.isNull(await db.userStore.getUserByEmail("no@one.com"));
     assert.isNull(await db.userStore.getUserByEmail(""));
     assert.isNull(await db.userStore.getUserById(""));
     assert.isNull(await db.userStore.getUserById());

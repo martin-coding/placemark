@@ -1,0 +1,23 @@
+{{#each users}}
+  <div class="box box-link-hover-shadow">
+    <h2 class="title">
+      {{firstName}}
+      {{lastName}}
+      {{#if isLoggedInUser}}<span>(You)</span>{{/if}}
+    </h2>
+    <p>Email: {{email}}</p>
+
+    {{#if isAdmin}}
+      <p>Role: <strong>Admin</strong></p>
+    {{else}}
+      <p>Role: User</p>
+    {{/if}}
+
+    {{#unless isAdmin}}
+      <br />
+      <a href="/admin/deleteuser/{{_id}}" class="button">
+        <i class="fas fa-trash"></i>
+      </a>
+    {{/unless}}
+  </div>
+{{/each}}
