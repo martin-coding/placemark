@@ -1,6 +1,7 @@
 import { accountsController } from "./controllers/accounts-controller.js";
 import { dashboardController } from "./controllers/dashboard-controller.js";
 import { adminController } from "./controllers/admin-controller.js";
+import { locationController } from "./controllers/location-controller.js";
 
 export const webRoutes = [
   { method: "GET", path: "/", config: accountsController.index },
@@ -13,6 +14,9 @@ export const webRoutes = [
   { method: "GET", path: "/dashboard", config: dashboardController.index },
   { method: "POST", path: "/dashboard/addlocation", config: dashboardController.addLocation },
   { method: "GET", path: "/dashboard/deletelocation/{id}", config: dashboardController.deleteLocation },
+
+  { method: "GET", path: "/location/{id}", config: locationController.index },
+  { method: "POST", path: "/location/{id}/uploadimage", config: locationController.uploadImage },
 
   { method: "GET", path: "/admin", config: adminController.index },
   { method: "GET", path: "/admin/deleteuser/{id}", config: adminController.deleteUser },
