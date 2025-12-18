@@ -7,6 +7,7 @@ const locationSchema = new Schema({
   latitude: Number,
   longitude: Number,
   description: String,
+  img: String,
   userid: {
     type: Schema.Types.ObjectId,
     ref: "User",
