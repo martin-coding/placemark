@@ -5,7 +5,8 @@ export const dashboardController = {
   index: {
     handler: async function (request, h) {
       const loggedInUser = request.auth.credentials;
-      const locations = await db.locationStore.getUserLocations(loggedInUser._id);
+      const { category } = request.query;
+      const locations = await db.locationStore.getUserLocations(loggedInUser._id, category);
       const viewData = {
         title: "Placemark Dashboard",
         user: loggedInUser,
@@ -33,6 +34,7 @@ export const dashboardController = {
         latitude: request.payload.latitude,
         longitude: request.payload.longitude,
         description: request.payload.description,
+        category: request.payload.category,
       };
       await db.locationStore.addLocation(newLocation);
       return h.redirect("/dashboard");
