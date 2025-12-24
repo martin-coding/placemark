@@ -1,13 +1,13 @@
 import { assert } from "chai";
 import { placemarkService } from "./placemark-service.js";
 import { decodeToken } from "../../src/api/jwt-utils.js";
-import { john, johnCredentials } from "../fixtures.js";
+import { john, johnCredentials, testUser, testUserCredentials } from "../fixtures.js";
 
 suite("Authentication API tests", async () => {
   setup(async () => {
     placemarkService.clearAuth();
-    await placemarkService.createUser(john);
-    await placemarkService.authenticate(johnCredentials);
+    await placemarkService.createUser(testUser);
+    await placemarkService.authenticate(testUserCredentials);
     await placemarkService.deleteAllUsers();
   });
 

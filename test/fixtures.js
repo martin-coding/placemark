@@ -12,6 +12,18 @@ export const johnCredentials = {
   password: "Password123",
 };
 
+export const testUser = {
+  firstName: "Test",
+  lastName: "Test",
+  email: "test@example.com",
+  password: "1234",
+};
+
+export const testUserCredentials = {
+  email: "test@example.com",
+  password: "1234",
+};
+
 export const testUsers = [
   {
     firstName: "Homer",
