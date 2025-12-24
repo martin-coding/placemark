@@ -37,6 +37,7 @@ export const LocationSpec = Joi.object()
       "number.max": "Longitude must be between -180 and 180.",
     }),
     userid: IdSpec,
+    category: Joi.string().example("waterfall"),
   })
   .label("Location");
 

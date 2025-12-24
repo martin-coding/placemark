@@ -21,9 +21,13 @@ export const locationMongoStore = {
     return this.getLocationById(locationObj._id);
   },
 
-  async getUserLocations(id) {
-    const location = await Location.find({ userid: id }).lean();
-    return location;
+  async getUserLocations(id, category) {
+    const query = { userid: id };
+    if (category) {
+      query.category = category;
+    }
+    const locations = await Location.find(query).lean();
+    return locations;
   },
 
   async deleteLocationById(id) {

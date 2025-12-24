@@ -1,21 +1,38 @@
 <form action="/dashboard/addlocation" method="POST">
   <div class="columns">
-    <div class="column is-full-mobile is-one-third-tablet is-one-third-desktop">
+    <div class="column is-full-mobile is-half-tablet is-half-desktop">
       <label class="label">Location Title</label>
-      <input class="input" type="text" placeholder="Enter location title" name="title" />
+      <input class="input" type="text" placeholder="Enter location title" name="title" required />
     </div>
-    <div class="column is-full-mobile is-one-third-tablet is-one-third-desktop">
+    <div class="column is-full-mobile is-half-tablet is-half-desktop">
+      <label class="label">Category</label>
+      <div class="select is-fullwidth">
+        <select name="category">
+          <option value="" disabled selected>Select Category</option>
+          <option value="hot-spring">Hot spring</option>
+          <option value="waterfall">Waterfall</option>
+          <option value="glacier">Glacier</option>
+          <option value="beach">Beach</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-full-mobile is-half-tablet is-half-desktop">
       <label class="label">Location Latitude</label>
-      <input class="input" type="number" step="0.000001" placeholder="Enter location latitude" name="latitude" />
+      <input class="input" type="number" step="0.000001" placeholder="Enter location latitude" name="latitude" required />
     </div>
-    <div class="column is-full-mobile is-one-third-tablet is-one-third-desktop">
+    <div class="column is-full-mobile is-half-tablet is-half-desktop">
       <label class="label">Location Longitude</label>
-      <input class="input" type="number" step="0.000001" placeholder="Enter location longitude" name="longitude" />
+      <input class="input" type="number" step="0.000001" placeholder="Enter location longitude" name="longitude" required />
     </div>
   </div>
-  <div class="field" style="margin-bottom: 24px;">
+
+  <div class="field">
     <label class="label">Location Description</label>
-    <input class="input" type="text" placeholder="Enter location description" name="description" />
+    <textarea class="textarea" placeholder="Enter location description" name="description"></textarea>
   </div>
+
   <button class="button is-link">Add Location</button>
 </form>

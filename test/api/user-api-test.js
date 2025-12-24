@@ -1,24 +1,29 @@
 import { assert } from "chai";
+import { afterEach } from "mocha";
 import { assertSubset } from "../test-utils.js";
 import { placemarkService } from "./placemark-service.js";
-import { john, johnCredentials, testUsers } from "../fixtures.js";
+import { john, johnCredentials, testUser, testUserCredentials, testUsers } from "../fixtures.js";
 
 const users = new Array(testUsers.length);
 
 suite("User API tests", () => {
   setup(async () => {
     placemarkService.clearAuth();
-    await placemarkService.createUser(john);
-    await placemarkService.authenticate(johnCredentials);
+    await placemarkService.createUser(testUser);
+    await placemarkService.authenticate(testUserCredentials);
     await placemarkService.deleteAllUsers();
     for (let i = 0; i < testUsers.length; i += 1) {
       // eslint-disable-next-line no-await-in-loop
       users[0] = await placemarkService.createUser(testUsers[i]);
     }
-    await placemarkService.createUser(john);
-    await placemarkService.authenticate(johnCredentials);
+    await placemarkService.createUser(testUser);
+    await placemarkService.authenticate(testUserCredentials);
   });
   teardown(async () => {});
+
+  afterEach(async () => {
+    await placemarkService.deleteAllUsers();
+  });
 
   test("create a user", async () => {
     const newUser = await placemarkService.createUser(john);

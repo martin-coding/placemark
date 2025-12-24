@@ -1,6 +1,37 @@
 {{> menu active="dashboard"}}
 
 <section class="section">
+  <div class="container mb-5">
+    <div class="dropdown is-hoverable">
+      <div class="dropdown-trigger">
+        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+          <span>Select Category</span>
+          <span class="icon is-small">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+        </button>
+      </div>
+      <div class="dropdown-menu" role="menu">
+    <div class="dropdown-content">
+      <a href="/dashboard" class="dropdown-item">
+        All
+      </a>
+      <a href="/dashboard?category=hot-spring" class="dropdown-item">
+        Hot spring
+      </a>
+      <a href="/dashboard?category=waterfall" class="dropdown-item">
+        Waterfall
+      </a>
+      <a href="/dashboard?category=glacier" class="dropdown-item">
+        Glacier
+      </a>
+      <a href="/dashboard?category=beach" class="dropdown-item">
+        Beach
+      </a>
+        </div>
+      </div>
+    </div>
+  </div>
   {{> list-locations}}
   {{> add-location}}
 </section>
