@@ -14,8 +14,8 @@ To explore the API endpoints, visit `/documentation` in your browser. This will 
 
 ### Example
 
-- Run your server locally (or access the deployed version). TODO
-- Open a browser and navigate to `http://localhost:PORT/documentation`.
+- Run your server locally and navigate to `http://localhost:PORT/documentation`
+- Or access the [deployed](https://placemark-l3cr.onrender.com/documentation) version
 
 This will display a fully interactive Swagger UI, allowing you to test API requests directly from the documentation.
 

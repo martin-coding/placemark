@@ -1,8 +1,9 @@
 import { EventEmitter } from "events";
 import { assert } from "chai";
+import { afterEach } from "mocha";
 import { placemarkService } from "./placemark-service.js";
 import { assertSubset } from "../test-utils.js";
-import { john, johnCredentials, waterfall, testLocations } from "../fixtures.js";
+import { testUser, testUserCredentials, waterfall, testLocations } from "../fixtures.js";
 
 EventEmitter.setMaxListeners(25);
 
@@ -11,13 +12,17 @@ suite("Location API tests", () => {
 
   setup(async () => {
     placemarkService.clearAuth();
-    user = await placemarkService.createUser(john);
-    await placemarkService.authenticate(johnCredentials);
+    user = await placemarkService.createUser(testUser);
+    await placemarkService.authenticate(testUserCredentials);
     await placemarkService.deleteAllLocations();
     await placemarkService.deleteAllUsers();
-    user = await placemarkService.createUser(john);
-    await placemarkService.authenticate(johnCredentials);
+    user = await placemarkService.createUser(testUser);
+    await placemarkService.authenticate(testUserCredentials);
     waterfall.userid = user._id;
+  });
+
+  afterEach(async () => {
+    await placemarkService.deleteAllUsers();
   });
 
   teardown(async () => {});

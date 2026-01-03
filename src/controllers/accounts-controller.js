@@ -5,7 +5,7 @@ export const accountsController = {
   index: {
     auth: false,
     handler: function (request, h) {
-      return h.view("main", { title: "Welcome to Locations" });
+      return h.view("main", { title: "Welcome to Placemark" });
     },
   },
   showSignup: {
@@ -25,8 +25,15 @@ export const accountsController = {
     },
     handler: async function (request, h) {
       const user = request.payload;
-      await db.userStore.addUser(user);
-      return h.redirect("/");
+      try {
+        await db.userStore.addUser(user);
+        return h.redirect("/");
+      } catch (error) {
+        if (error.code === 11000) {
+          return h.view("signup-view", { title: "Sign up error", errors: [{ message: "Email is already in use." }] }).takeover().code(400);
+        }
+        throw error;
+      }
     },
   },
   showLogin: {
