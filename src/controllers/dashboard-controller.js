@@ -10,7 +10,7 @@ export const dashboardController = {
       const viewData = {
         title: "Placemark Dashboard",
         user: loggedInUser,
-        locations: locations,
+        locations: JSON.stringify(locations),
       };
       return h.view("dashboard-view", viewData);
     },
