@@ -9,6 +9,7 @@ const locationSchema = new Schema({
   description: String,
   category: String,
   img: String,
+  visibility: String,
   userid: {
     type: Schema.Types.ObjectId,
     ref: "User",

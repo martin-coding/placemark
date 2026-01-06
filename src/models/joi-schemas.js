@@ -38,6 +38,7 @@ export const LocationSpec = Joi.object()
     }),
     userid: IdSpec,
     category: Joi.string().example("waterfall"),
+    visibility: Joi.string().example("public"),
   })
   .label("Location");
 

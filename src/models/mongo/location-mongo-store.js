@@ -22,10 +22,17 @@ export const locationMongoStore = {
   },
 
   async getUserLocations(id, category) {
-    const query = { userid: id };
+    const query = {
+      $or: [
+        { userid: id },
+        { visibility: "public" }
+      ]
+    };
+
     if (category) {
       query.category = category;
     }
+
     const locations = await Location.find(query).lean();
     return locations;
   },
