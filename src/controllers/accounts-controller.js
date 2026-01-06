@@ -30,7 +30,10 @@ export const accountsController = {
         return h.redirect("/");
       } catch (error) {
         if (error.code === 11000) {
-          return h.view("signup-view", { title: "Sign up error", errors: [{ message: "Email is already in use." }] }).takeover().code(400);
+          return h
+            .view("signup-view", { title: "Sign up error", errors: [{ message: "Email is already in use." }] })
+            .takeover()
+            .code(400);
         }
         throw error;
       }
