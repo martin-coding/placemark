@@ -40,7 +40,8 @@
     const marker = L.marker([loc.latitude, loc.longitude])
       .bindPopup(`
         <strong><a href="/location/${loc._id}">${loc.title}</a></strong><br>
-        <em>${loc.category}</em>
+        <em>${loc.category}</em><br>
+        ${loc.visibility}
       `);
 
     if (categoryLayers[loc.category]) {

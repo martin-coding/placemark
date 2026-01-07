@@ -51,6 +51,7 @@ export const waterfall = {
   longitude: -19.9879,
   description: "The waterfall drops 60 m (197 ft) and is part of the Seljalands River.",
   category: "waterfall",
+  visibility: "public",
 };
 
 export const testLocations = [
@@ -60,6 +61,7 @@ export const testLocations = [
     longitude: -20.672678,
     description: "With a flow rate of 360 m³/s, it has the highest average water flow of any waterfall in Iceland.",
     category: "waterfall",
+    visibility: "public",
   },
   {
     title: "Jökulsárlón",
@@ -67,6 +69,7 @@ export const testLocations = [
     longitude: -16.211667,
     description: "A large glacial lake in southern part of Vatnajökull National Park, the deepest in Iceland.",
     category: "glacier",
+    visibility: "public",
   },
   {
     title: "Reynisfjara",
@@ -74,5 +77,6 @@ export const testLocations = [
     longitude: -19.0474,
     description: "A popular black sand beach in southern Iceland near the town of Vík í Mýrdal.",
     category: "beach",
+    visibility: "public",
   },
 ];
