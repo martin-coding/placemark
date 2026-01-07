@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { db } from "../models/db.js";
 import { UserSpec, UserCredentialsSpec } from "../models/joi-schemas.js";
 
@@ -57,9 +58,23 @@ export const accountsController = {
     handler: async function (request, h) {
       const { email, password } = request.payload;
       const user = await db.userStore.getUserByEmail(email);
-      if (!user || user.password !== password) {
-        return h.redirect("/");
+
+      if (!user) {
+        return h
+          .view("login-view", { title: "Log in error", errors: [{ message: "Email or password incorrect." }] })
+          .takeover()
+          .code(400);
       }
+
+      const isValid = await bcrypt.compare(password, user.password);
+
+      if (!isValid) {
+        return h
+          .view("login-view", { title: "Log in error", errors: [{ message: "Email or password incorrect." }] })
+          .takeover()
+          .code(400);
+      }
+
       request.cookieAuth.set({ id: user._id });
       return h.redirect("/dashboard");
     },
