@@ -1,78 +1,11 @@
 {{> menu active="dashboard"}}
 
 <section>
-  <div id="map" style="height: calc(100vh - 4rem);"></div>
+  <div
+    id="map"
+    data-locations='{{{ locations }}}'
+    style="height: calc(100vh - 4rem);">
+  </div>
 </section>
 
-<script>
-  const locations = {{{locations}}};
-
-  const map = L.map('map', {
-    center: [64.963, -19.02],
-    zoom: 7
-  });
-
-  const terrain = L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    { attribution: "© OpenStreetMap contributors" }
-  );
-
-  const satellite = L.tileLayer(
-    "https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
-    {
-      subdomains: ["mt0", "mt1", "mt2", "mt3"],
-      attribution: "© Google",
-    }
-  );
-
-  terrain.addTo(map);
-
-  const categoryLayers = {
-    waterfall: L.layerGroup(),
-    beach: L.layerGroup(),
-    glacier: L.layerGroup(),
-    "hot-spring": L.layerGroup(),
-  };
-
-  const bounds = [];
-
-  locations.forEach((loc) => {
-    const marker = L.marker([loc.latitude, loc.longitude])
-      .bindPopup(`
-        <strong><a href="/location/${loc._id}">${loc.title}</a></strong><br>
-        <em>${loc.category}</em><br>
-        ${loc.visibility}
-      `);
-
-    if (categoryLayers[loc.category]) {
-      marker.addTo(categoryLayers[loc.category]);
-    }
-
-    bounds.push([loc.latitude, loc.longitude]);
-  });
-
-  Object.values(categoryLayers).forEach(layer => layer.addTo(map));
-
-  // Because nothing forces you to place POIs in iceland
-  if (bounds.length) {
-    const markerBounds = L.latLngBounds(bounds);
-
-    if (!map.getBounds().contains(markerBounds)) {
-      map.fitBounds(markerBounds);
-    }
-  }
-
-  const baseMaps = {
-    "Terrain": terrain,
-    "Satellite": satellite,
-  };
-
-  const overlayMaps = {
-    "Waterfalls": categoryLayers.waterfall,
-    "Beaches": categoryLayers.beach,
-    "Glaciers": categoryLayers.glacier,
-    "Hot Springs": categoryLayers["hot-spring"],
-  };
-
-  L.control.layers(baseMaps, overlayMaps).addTo(map);
-</script>
+<script src="/js/dashboard.js"></script>

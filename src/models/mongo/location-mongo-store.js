@@ -23,10 +23,7 @@ export const locationMongoStore = {
 
   async getUserLocations(id, category) {
     const query = {
-      $or: [
-        { userid: id },
-        { visibility: "public" }
-      ]
+      $or: [{ userid: id }, { visibility: "public" }],
     };
 
     if (category) {
