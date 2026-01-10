@@ -5,6 +5,11 @@ export const locationController = {
   index: {
     handler: async function (request, h) {
       const location = await db.locationStore.getLocationById(request.params.id);
+      if (!location) {
+        // 404 Page?
+        return h.redirect(`/dashboard`);
+      }
+
       const viewData = {
         title: "Location",
         location: location,

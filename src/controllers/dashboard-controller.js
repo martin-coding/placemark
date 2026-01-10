@@ -35,6 +35,7 @@ export const dashboardController = {
         longitude: request.payload.longitude,
         description: request.payload.description,
         category: request.payload.category,
+        visibility: "private",
       };
       await db.locationStore.addLocation(newLocation);
       return h.redirect("/dashboard");
@@ -48,6 +49,20 @@ export const dashboardController = {
       }
       await db.locationStore.deleteLocationById(location._id);
       return h.redirect("/dashboard");
+    },
+  },
+  new: {
+    handler: async function (request, h) {
+      const loggedInUser = request.auth.credentials;
+      const { lat, lng } = request.query;
+
+      const viewData = {
+        title: "Add Location",
+        user: loggedInUser,
+        lat: lat,
+        lng: lng,
+      };
+      return h.view("location-form", viewData);
     },
   },
 };
