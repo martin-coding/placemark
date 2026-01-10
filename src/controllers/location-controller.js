@@ -7,7 +7,7 @@ export const locationController = {
       const location = await db.locationStore.getLocationById(request.params.id);
       if (!location) {
         // 404 Page?
-        return h.redirect(`/dashboard`);
+        return h.redirect("/dashboard");
       }
 
       const viewData = {
