@@ -34,21 +34,12 @@ jobs:
         run: npm run lint
       - name: Start the app
         run: nohup npm run start &
-      - name: Wait for app
-        run: |
-          for i in {1..30}; do
-            if nc -z localhost 3000; then
-              echo "App is up!"
-              exit 0
-            fi
-            echo "Waiting..."
-            sleep 1
-          done
-          echo "App failed to start"
-          exit 1
       - name: Run e2e tests
         uses: cypress-io/github-action@2ad32e649e4db26c07674ebae31a297601dbcbaf # v6.10.8
         with:
           browser: firefox
+          install: false
+          wait-on: http://localhost:3000
+          wait-on-timeout: 30000
       - name: Run tests
         run: npm run test
