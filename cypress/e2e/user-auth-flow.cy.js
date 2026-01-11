@@ -3,7 +3,9 @@ describe("User authentication flow", () => {
 
   beforeEach(() => {
     cy.task("db:reset");
-    cy.fixture("user").then((u) => (user = u));
+    cy.fixture("user").then((u) => {
+      user = u;
+    });
   });
 
   it("allows a user to sign up", () => {
