@@ -46,5 +46,9 @@ jobs:
           done
           echo "App failed to start"
           exit 1
+      - name: Run e2e tests
+        uses: cypress-io/github-action@2ad32e649e4db26c07674ebae31a297601dbcbaf # v6.10.8
+        with:
+          browser: firefox
       - name: Run tests
         run: npm run test

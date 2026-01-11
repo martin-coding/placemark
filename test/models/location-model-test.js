@@ -10,7 +10,6 @@ EventEmitter.setMaxListeners(25);
 suite("Location Model tests", () => {
   before(async () => {
     db.init("mongo");
-    await db.locationStore.deleteAllLocations();
   });
 
   setup(async () => {
