@@ -24,6 +24,8 @@ if (result.error) {
   // process.exit(1);
 }
 
+Handlebars.registerHelper("eq", (a, b) => a === b);
+
 const swaggerOptions = {
   info: {
     title: "Placemark API",
