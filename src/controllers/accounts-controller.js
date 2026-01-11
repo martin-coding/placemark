@@ -34,7 +34,7 @@ export const accountsController = {
           return h
             .view("signup-view", { title: "Sign up error", errors: [{ message: "Email is already in use." }] })
             .takeover()
-            .code(400);
+            .code(409);
         }
         throw error;
       }
