@@ -19,6 +19,12 @@
     "no-undef": "off",
     "func-names": "off",
     "no-console": "off",
-    "import/no-unresolved": "off"
+    "import/no-unresolved": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": ["**/cypress.config.js", "**/cypress/**/*.js", "**/*.cy.js", "**/*.spec.js", "**/*-test.js", "**/test/**/*.js"]
+      }
+    ]
   }
 }
