@@ -6,9 +6,9 @@
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">
-          <a id="dashboard" class="button" href="/dashboard"> Dashboard </a>
+          <a id="dashboard" class="button {{#if (eq active 'dashboard')}}is-primary{{/if}}" href="/dashboard"> Dashboard </a>
           {{#if user.isAdmin}}
-            <a id="admin" class="button" href="/admin"> Admin </a>
+            <a id="admin" class="button {{#if (eq active 'admin')}}is-primary{{/if}}" href="/admin"> Admin </a>
           {{/if}}
           <a id="logout" class="button" href="/logout"> Logout </a>
         </div>
@@ -16,7 +16,3 @@
     </div>
   </div>
 </nav>
-
-<script>
-  document.getElementById("{{active}}").classList.add("is-primary");
-</script>

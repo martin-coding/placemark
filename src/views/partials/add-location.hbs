@@ -34,5 +34,20 @@
     <textarea class="textarea" placeholder="Enter location description" name="description"></textarea>
   </div>
 
+  <div class="field">
+    <label class="label">Location Visibility</label>
+    <div class="control">
+      <label class="radio">
+        <input type="radio" name="visibility" value="public" checked />
+        Public
+      </label>
+      <label class="radio">
+        <input type="radio" name="visibility" value="private" />
+        Private
+      </label>
+    </div>
+    <p class="help">Public locations are visible to everyone. Private locations are only visible to you.</p>
+  </div>
+
   <button class="button is-link">Add Location</button>
 </form>

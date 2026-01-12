@@ -35,7 +35,7 @@ export const dashboardController = {
         longitude: request.payload.longitude,
         description: request.payload.description,
         category: request.payload.category,
-        visibility: "private",
+        visibility: request.payload.visibility,
       };
       await db.locationStore.addLocation(newLocation);
       return h.redirect("/dashboard");
