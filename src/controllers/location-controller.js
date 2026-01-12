@@ -5,11 +5,13 @@ export const locationController = {
   index: {
     handler: async function (request, h) {
       const location = await db.locationStore.getLocationById(request.params.id);
+      const loggedInUser = request.auth.credentials;
       if (!location) {
-        // 404 Page?
-        return h.redirect("/dashboard");
+        return h.view("404", { title: "Not found" }).code(404);
       }
-
+      if (location.visibility == "private" && loggedInUser._id.toString() !== location.userid.toString()) {
+        return h.view("404", { title: "Not found" }).code(404);
+      }
       const viewData = {
         title: "Location",
         location: location,
