@@ -9,7 +9,7 @@ export const locationController = {
       if (!location) {
         return h.view("404", { title: "Not found" }).code(404);
       }
-      if (location.visibility == "private" && loggedInUser._id.toString() !== location.userid.toString()) {
+      if (location.visibility === "private" && loggedInUser._id.toString() !== location.userid.toString()) {
         return h.view("404", { title: "Not found" }).code(404);
       }
       const viewData = {

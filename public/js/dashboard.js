@@ -50,10 +50,7 @@ locations.forEach((loc) => {
     markerOptions.icon = privateIcon;
   }
 
-  const marker = L.marker(
-    [loc.latitude, loc.longitude],
-    markerOptions
-  ).bindPopup(`
+  const marker = L.marker([loc.latitude, loc.longitude], markerOptions).bindPopup(`
       <strong><a href="/location/${loc._id}">${loc.title}</a></strong><br>
       <em>${loc.category}</em><br>
       ${loc.visibility}
