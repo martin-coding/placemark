@@ -13,6 +13,24 @@ const satellite = L.tileLayer("https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z
   attribution: "© Google",
 });
 
+const privateIcon = L.icon({
+  iconUrl: "/images/marker-private.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  shadowSize: [41, 41],
+});
+
+const newLocationIcon = L.icon({
+  iconUrl: "/images/marker-new.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  shadowSize: [41, 41],
+});
+
 terrain.addTo(map);
 
 const categoryLayers = {
@@ -26,11 +44,20 @@ const categoryLayers = {
 const bounds = [];
 
 locations.forEach((loc) => {
-  const marker = L.marker([loc.latitude, loc.longitude]).bindPopup(`
-        <strong><a href="/location/${loc._id}">${loc.title}</a></strong><br>
-        <em>${loc.category}</em><br>
-        ${loc.visibility}
-      `);
+  const markerOptions = {};
+
+  if (loc.visibility === "private") {
+    markerOptions.icon = privateIcon;
+  }
+
+  const marker = L.marker(
+    [loc.latitude, loc.longitude],
+    markerOptions
+  ).bindPopup(`
+      <strong><a href="/location/${loc._id}">${loc.title}</a></strong><br>
+      <em>${loc.category}</em><br>
+      ${loc.visibility}
+    `);
 
   if (categoryLayers[loc.category]) {
     marker.addTo(categoryLayers[loc.category]);
@@ -105,15 +132,6 @@ function popupHtml(marker) {
       </button>
     `;
 }
-
-const newLocationIcon = L.icon({
-  iconUrl: "/images/marker-new.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-  shadowSize: [41, 41],
-});
 
 map.on("click", (e) => {
   if (!placementMode) return;
