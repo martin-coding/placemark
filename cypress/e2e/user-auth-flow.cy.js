@@ -18,6 +18,7 @@ describe("User authentication flow", () => {
     cy.get("input[name=lastName]").type(user.lastName);
     cy.get("input[name=email]").type(user.email);
     cy.get("input[name=password]").type(user.password);
+    cy.get("input[name=passwordConfirm]").type(user.passwordConfirm);
     cy.get("form").submit();
 
     cy.location("pathname").should("eq", "/");

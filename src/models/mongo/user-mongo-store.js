@@ -1,6 +1,6 @@
 import Mongoose from "mongoose";
-import bcrypt from "bcrypt";
 import { User } from "./user.js";
+import { AuthIdentity } from "./auth.js";
 
 export const userMongoStore = {
   async getAllUsers() {
@@ -30,13 +30,15 @@ export const userMongoStore = {
 
   async deleteUserById(id) {
     try {
-      await User.deleteOne({ _id: id });
+      await AuthIdentity.deleteMany({ user: id });
+      await User.findByIdAndDelete(id);
     } catch (error) {
       console.log("bad id");
     }
   },
 
   async deleteAll() {
+    await AuthIdentity.deleteMany({});
     await User.deleteMany({});
   },
 };

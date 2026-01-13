@@ -16,12 +16,12 @@ export const testUser = {
   firstName: "Test",
   lastName: "Test",
   email: "test@example.com",
-  password: "1234",
+  password: "12345678",
 };
 
 export const testUserCredentials = {
   email: "test@example.com",
-  password: "1234",
+  password: "12345678",
 };
 
 export const testUsers = [
@@ -29,19 +29,19 @@ export const testUsers = [
     firstName: "Homer",
     lastName: "Simpson",
     email: "homer@simpson.com",
-    password: "secret",
+    password: "secret12",
   },
   {
     firstName: "Marge",
     lastName: "Simpson",
     email: "marge@simpson.com",
-    password: "secret",
+    password: "secret34",
   },
   {
     firstName: "Bart",
     lastName: "Simpson",
     email: "bart@simpson.com",
-    password: "secret",
+    password: "secret56",
   },
 ];
 

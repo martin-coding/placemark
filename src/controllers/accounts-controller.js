@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { db } from "../models/db.js";
-import { UserSpec, UserCredentialsSpec } from "../models/joi-schemas.js";
+import { UserFormSpec, UserCredentialsSpec } from "../models/joi-schemas.js";
 
 export const accountsController = {
   index: {
@@ -18,7 +18,7 @@ export const accountsController = {
   signup: {
     auth: false,
     validate: {
-      payload: UserSpec,
+      payload: UserFormSpec,
       options: { abortEarly: false },
       failAction: function (request, h, error) {
         return h.view("signup-view", { title: "Sign up error", errors: error.details }).takeover().code(400);
@@ -103,6 +103,7 @@ export const accountsController = {
         return h.redirect("/dashboard");
       }
 
+      // No existing identity -> create new account
       const user = await db.userStore.addUser({
         firstName: profile.username,
         lastName: profile.username,
