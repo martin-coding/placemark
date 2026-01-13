@@ -15,9 +15,13 @@ export const UserSpec = UserCredentialsSpec.keys({
 }).label("UserDetails");
 
 export const UserSpecPlus = UserSpec.keys({
+  password: Joi.forbidden(),
   _id: IdSpec,
   __v: Joi.number(),
+  emailVerified: Joi.boolean(),
   isAdmin: Joi.boolean(),
+  createdAt: Joi.date().iso(),
+  updatedAt: Joi.date().iso(),
 }).label("UserDetailsPlus");
 
 export const UserArray = Joi.array().items(UserSpecPlus).label("UserArray");

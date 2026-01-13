@@ -27,6 +27,8 @@ jobs:
         run: |
           echo "COOKIE_NAME=placemark" >> .env
           echo "COOKIE_PASSWORD=${{ secrets.COOKIE_PASSWORD }}" >> .env
+          echo "GITHUB_CLIENT_ID=${{ secrets.AUTH_GITHUB_CLIENT_ID }}" >> .env
+          echo "GITHUB_CLIENT_SECRET=${{ secrets.AUTH_GITHUB_CLIENT_SECRET }}" >> .env
           echo "HOSTNAME=localhost" >> .env
           echo "PORT=3000" >> .env
           echo "DB=mongodb://localhost/placemark" >> .env
