@@ -106,7 +106,7 @@ export const accountsController = {
       // No existing identity -> create new account
       const user = await db.userStore.addUser({
         firstName: profile.username,
-        lastName: profile.username,
+        lastName: null,
       });
       await db.authStore.addOAuth({
         user: user._id,

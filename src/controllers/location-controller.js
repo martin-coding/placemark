@@ -7,14 +7,24 @@ export const locationController = {
       const location = await db.locationStore.getLocationById(request.params.id);
       const loggedInUser = request.auth.credentials;
       if (!location) {
-        return h.view("404", { title: "Not found" }).code(404);
+        return h.view("404", { title: "Not found", user: loggedInUser }).code(404);
       }
       if (location.visibility === "private" && loggedInUser._id.toString() !== location.userid.toString()) {
-        return h.view("404", { title: "Not found" }).code(404);
+        return h.view("404", { title: "Not found", user: loggedInUser }).code(404);
       }
+      const reviews = await db.reviewStore.getReviewsFromLocation(location._id);
+
+      let userReview = null;
+      if (loggedInUser) {
+        userReview = await db.reviewStore.getUserReviewForLocation(location._id, loggedInUser._id);
+      }
+
       const viewData = {
         title: "Location",
         location: location,
+        user: loggedInUser,
+        reviews: reviews,
+        userReview,
       };
       return h.view("location-view", viewData);
     },
@@ -40,6 +50,15 @@ export const locationController = {
       output: "data",
       maxBytes: 209715200,
       parse: true,
+    },
+  },
+  review: {
+    handler: async function (request, h) {
+      const loggedInUser = request.auth.credentials;
+      const location = await db.locationStore.getLocationById(request.params.id);
+      const { rating, comment } = request.payload;
+      await db.reviewStore.upsertReview(location._id, loggedInUser._id, rating, comment);
+      return h.redirect(`/location/${request.params.id}`);
     },
   },
 };

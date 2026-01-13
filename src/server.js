@@ -26,6 +26,27 @@ if (result.error) {
 }
 
 Handlebars.registerHelper("eq", (a, b) => a === b);
+Handlebars.registerHelper("neq", (a, b) => String(a) !== String(b));
+Handlebars.registerHelper("formatDate", (date) => {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-IE", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+});
+Handlebars.registerHelper("stars", function (rating) {
+  let html = "";
+  for (let i = 1; i <= 5; i++) {
+    if (i <= rating) {
+      html += `<i class="fas fa-star"></i>`;
+    } else {
+      html += `<i class="far fa-star"></i>`;
+    }
+  }
+  return new Handlebars.SafeString(html);
+});
+
 
 const swaggerOptions = {
   info: {

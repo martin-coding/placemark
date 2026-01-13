@@ -1,0 +1,31 @@
+{{#each reviews}}
+  <article class="media">
+    <div class="media-content">
+      <div class="content">
+
+        <!-- Header line -->
+        <div class="is-flex is-justify-content-space-between is-align-items-center">
+          <div>
+            <strong>{{this.userid.firstName}} {{this.userid.lastName}} ·</strong>
+            <span class="has-text-warning">{{stars this.rating}}</span>
+          </div>
+
+          <small class="has-text-grey">
+            {{#if (neq this.createdAt this.updatedAt)}}
+              Edited {{formatDate this.updatedAt}}
+            {{else}}
+              {{formatDate this.createdAt}}
+            {{/if}}
+          </small>
+        </div>
+
+        <!-- Comment -->
+        <p class="mt-2">
+          {{this.comment}}
+        </p>
+
+      </div>
+    </div>
+  </article>
+  <hr />
+{{/each}}

@@ -19,6 +19,7 @@ export const webRoutes = [
 
   { method: "GET", path: "/location/{id}", config: locationController.index },
   { method: "POST", path: "/location/{id}/uploadimage", config: locationController.uploadImage },
+  { method: "POST", path: "/location/{id}/review", config: locationController.review },
 
   { method: "GET", path: "/admin", config: adminController.index },
   { method: "GET", path: "/admin/deleteuser/{id}", config: adminController.deleteUser },

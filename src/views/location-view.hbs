@@ -1,8 +1,159 @@
 {{> menu}}
 
 <section class="section">
-  <div class="title">
-    {{location.title}}
+  <div class="container">
+
+    <!-- Title Header -->
+    <div class="box">
+      <h1 class="title is-3">{{location.title}}</h1>
+      <p class="subtitle is-6 has-text-grey">{{location.category}} · {{location.visibility}}</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="columns">
+
+      <!-- Image Column -->
+      <div class="column is-5">
+        <div class="card">
+
+          {{#if location.img}}
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <img src="{{location.img}}" alt="{{location.title}}">
+              </figure>
+            </div>
+          {{else}}
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <img src="https://bulma.io/images/placeholders/1280x960.png">
+              </figure>
+            </div>
+          {{/if}}
+
+          {{#if user.isAdmin }}
+          <div class="card-content">
+            <form action="/location/{{location._id}}/uploadimage" method="POST" enctype="multipart/form-data">
+              <div class="file has-name is-fullwidth">
+                <label class="file-label">
+                  <input class="file-input" name="imagefile" type="file" accept="image/png, image/jpeg" />
+                  <span class="file-cta">
+                    <span class="file-icon">
+                      <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label">Choose image…</span>
+                  </span>
+                  <span class="file-name">No file selected</span>
+                </label>
+              </div>
+              <button type="submit" class="button is-link is-fullwidth mt-3">Upload Image</button>
+            </form>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+
+      <!-- Info Column -->
+      <div class="column is-7">
+
+        <div class="columns">
+          <div class="column">
+            <div class="box">
+              <p class="heading">Latitude</p>
+              <p class="title is-6">{{location.latitude}}</p>
+            </div>
+          </div>
+          <div class="column">
+            <div class="box">
+              <p class="heading">Longitude</p>
+              <p class="title is-6">{{location.longitude}}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="box">
+          <h2 class="title is-5">Description</h2>
+          <p>{{location.description}}</p>
+        </div>
+
+      </div>
+    </div>
+
+    {{#if userReview}}
+    <div class="box has-background-info-light">
+      <h2 class="title is-5">Your Review</h2>
+
+      <form action="/location/{{location._id}}/review" method="POST">
+
+        <div class="field">
+          <label class="label">Rating</label>
+          <div class="select">
+            <select name="rating">
+              <option value="5" {{#if (eq userReview.rating 5)}}selected{{/if}}>⭐⭐⭐⭐⭐</option>
+              <option value="4" {{#if (eq userReview.rating 4)}}selected{{/if}}>⭐⭐⭐⭐</option>
+              <option value="3" {{#if (eq userReview.rating 3)}}selected{{/if}}>⭐⭐⭐</option>
+              <option value="2" {{#if (eq userReview.rating 2)}}selected{{/if}}>⭐⭐</option>
+              <option value="1" {{#if (eq userReview.rating 1)}}selected{{/if}}>⭐</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Comment</label>
+          <textarea class="textarea" name="comment">{{userReview.comment}}</textarea>
+        </div>
+
+        <button class="button is-success">💾 Update Review</button>
+      </form>
+    </div>
+    {{else}}
+    <div class="box">
+      <h2 class="title is-5">Add a Review</h2>
+
+      <form action="/location/{{location._id}}/review" method="POST">
+
+        <div class="field">
+          <label class="label">Rating</label>
+          <div class="select">
+            <select name="rating">
+              <option value="5">⭐⭐⭐⭐⭐</option>
+              <option value="4">⭐⭐⭐⭐</option>
+              <option value="3">⭐⭐⭐</option>
+              <option value="2">⭐⭐</option>
+              <option value="1">⭐</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Comment</label>
+          <textarea class="textarea" name="comment" placeholder="Write your review..."></textarea>
+        </div>
+
+        <button class="button is-primary">Submit Review</button>
+      </form>
+    </div>
+    {{/if}}
+
+    <!-- Reviews Section -->
+    <div class="box">
+      <h2 class="title is-5">Reviews</h2>
+
+      {{#if reviews.length}}
+        {{> list-reviews}}
+      {{else}}
+        <p class="has-text-grey">No reviews yet. Be the first to review this place.</p>
+      {{/if}}
+    </div>
   </div>
-  {{> location-image }}
 </section>
+
+<script>
+  const fileInput = document.querySelector(".file-input");
+  if (fileInput) {
+    fileInput.onchange = () => {
+      if (fileInput.files.length > 0) {
+        document.querySelector(".file-name").textContent = fileInput.files[0].name;
+      }
+    };
+  }
+</script>
