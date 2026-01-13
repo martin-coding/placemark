@@ -35,18 +35,17 @@ Handlebars.registerHelper("formatDate", (date) => {
     day: "numeric",
   });
 });
-Handlebars.registerHelper("stars", function (rating) {
+Handlebars.registerHelper("stars", (rating) => {
   let html = "";
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 5; i += 1) {
     if (i <= rating) {
-      html += `<i class="fas fa-star"></i>`;
+      html += "<i class=\"fas fa-star\"></i>";
     } else {
-      html += `<i class="far fa-star"></i>`;
+      html += "<i class=\"far fa-star\"></i>";
     }
   }
   return new Handlebars.SafeString(html);
 });
-
 
 const swaggerOptions = {
   info: {

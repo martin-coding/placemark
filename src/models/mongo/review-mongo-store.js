@@ -2,8 +2,8 @@ import Mongoose from "mongoose";
 import { Review } from "./review.js";
 
 export const reviewMongoStore = {
-  async getReviewsFromLocation(location_id) {
-    const reviews = await Review.find({ locationid: location_id })
+  async getReviewsFromLocation(locationId) {
+    const reviews = await Review.find({ locationid: locationId })
       .populate({
         path: "userid",
         select: "firstName lastName",
@@ -15,7 +15,7 @@ export const reviewMongoStore = {
     await Review.create(review);
   },
   async getUserReviewForLocation(locationId, userId) {
-    return await Review.findOne({
+    return Review.findOne({
       locationid: locationId,
       userid: userId,
     }).lean();

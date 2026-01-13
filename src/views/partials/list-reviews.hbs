@@ -12,7 +12,8 @@
 
           <small class="has-text-grey">
             {{#if (neq this.createdAt this.updatedAt)}}
-              Edited {{formatDate this.updatedAt}}
+              Edited
+              {{formatDate this.updatedAt}}
             {{else}}
               {{formatDate this.createdAt}}
             {{/if}}
