@@ -1,6 +1,7 @@
 import Mongoose from "mongoose";
 import { User } from "./user.js";
 import { AuthIdentity } from "./auth.js";
+import { Location } from "./location.js";
 
 export const userMongoStore = {
   async getAllUsers() {
@@ -30,6 +31,10 @@ export const userMongoStore = {
 
   async deleteUserById(id) {
     try {
+      await Location.deleteMany({
+        visibility: "private",
+        userid: id,
+      });
       await AuthIdentity.deleteMany({ user: id });
       await User.findByIdAndDelete(id);
     } catch (error) {

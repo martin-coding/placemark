@@ -1,13 +1,4 @@
 export const seedData = {
-  users: {
-    _model: "User",
-    max: {
-      firstName: "Max",
-      lastName: "Mustermann",
-      email: "max@mustermann.de",
-      password: "$2b$10$LXud90Y.VhTlfSdyju4VZ.ZHC6lsjnRVjRTPHF/FWu5MiR4ErqBXu",
-    },
-  },
   locations: {
     _model: "Location",
     location_1: {
