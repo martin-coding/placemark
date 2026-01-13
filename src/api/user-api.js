@@ -50,12 +50,27 @@ export const userApi = {
     auth: false,
     handler: async function (request, h) {
       try {
-        const user = await db.userStore.addUser(request.payload);
-        if (user) {
-          return h.response(user).code(201);
+        const data = request.payload;
+        const user = await db.userStore.addUser({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          emailVerified: true,
+        });
+        if (!user) {
+          return Boom.badImplementation("error creating user");
         }
-        return Boom.badImplementation("error creating user");
+        await db.authStore.addLocalAuth({
+          user: user._id,
+          providerUserId: user._id.toString(),
+          password: data.password,
+          email: data.email,
+        });
+        return h.response(user).code(201);
       } catch (err) {
+        if (err.code === 11000) {
+          return Boom.conflict("Email already in use");
+        }
         return Boom.serverUnavailable("Database Error", err);
       }
     },
@@ -110,10 +125,11 @@ export const userApi = {
     handler: async function (request, h) {
       try {
         const user = await db.userStore.getUserByEmail(request.payload.email);
+        const identity = await db.authStore.getLocalIdentity(request.payload.email);
         if (!user) {
           return Boom.unauthorized("User not found");
         }
-        const valid = await bcrypt.compare(request.payload.password, user.password);
+        const valid = await bcrypt.compare(request.payload.password, identity.passwordHash);
         if (!valid) {
           return Boom.unauthorized("Invalid password");
         }

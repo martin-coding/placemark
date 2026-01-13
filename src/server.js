@@ -1,6 +1,7 @@
 import Inert from "@hapi/inert";
 import Hapi from "@hapi/hapi";
 import Vision from "@hapi/vision";
+import Bell from "@hapi/bell";
 import Cookie from "@hapi/cookie";
 import Handlebars from "handlebars";
 import dotenv from "dotenv";
@@ -46,6 +47,7 @@ async function init() {
     port: process.env.PORT || 3000,
   });
 
+  await server.register(Bell);
   await server.register(Cookie);
   await server.register(jwt);
 
@@ -77,6 +79,7 @@ async function init() {
       name: process.env.COOKIE_NAME,
       password: process.env.COOKIE_PASSWORD,
       isSecure: false,
+      path: "/",
     },
     redirectTo: "/",
     validate: accountsController.validate,
@@ -87,6 +90,13 @@ async function init() {
     verifyOptions: { algorithms: ["HS256"] },
   });
   server.auth.default("session");
+  server.auth.strategy("github", "bell", {
+    provider: "github",
+    password: process.env.COOKIE_PASSWORD,
+    clientId: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    isSecure: false,
+  });
 
   db.init("mongo");
   server.route(webRoutes);

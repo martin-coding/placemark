@@ -31,13 +31,8 @@ suite("User API tests", () => {
     const { password, ...johnWithoutPassword } = john;
 
     assertSubset(johnWithoutPassword, newUser);
-    // assert.isUndefined(newUser.password);
+    assert.isUndefined(newUser.password);
     assert.isDefined(newUser._id);
-
-    // temporary test
-    assert.isDefined(newUser.password);
-    assert.notEqual(newUser.password, john.password);
-    assert.match(newUser.password, /^\$2[aby]\$/);
   });
 
   test("delete a user", async () => {

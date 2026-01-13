@@ -1,13 +1,31 @@
-import Mongoose from "mongoose";
+import mongoose from "mongoose";
 
-const { Schema } = Mongoose;
+const { Schema } = mongoose;
 
-const userSchema = new Schema({
-  firstName: String,
-  lastName: String,
-  email: { type: String, unique: true },
-  password: String,
-  isAdmin: { type: Boolean, default: false },
-});
+const userSchema = new Schema(
+  {
+    firstName: String,
+    lastName: String,
 
-export const User = Mongoose.model("User", userSchema);
+    email: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      sparse: true,
+      unique: true,
+    },
+
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { timestamps: true }
+);
+
+export const User = mongoose.model("User", userSchema);

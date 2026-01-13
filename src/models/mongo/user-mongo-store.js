@@ -1,6 +1,7 @@
 import Mongoose from "mongoose";
-import bcrypt from "bcrypt";
 import { User } from "./user.js";
+import { AuthIdentity } from "./auth.js";
+import { Location } from "./location.js";
 
 export const userMongoStore = {
   async getAllUsers() {
@@ -17,10 +18,6 @@ export const userMongoStore = {
   },
 
   async addUser(user) {
-    const saltRounds = 10;
-
-    user.password = await bcrypt.hash(user.password, saltRounds);
-
     const newUser = new User(user);
     const userObj = await newUser.save();
     const u = await this.getUserById(userObj._id);
@@ -34,13 +31,19 @@ export const userMongoStore = {
 
   async deleteUserById(id) {
     try {
-      await User.deleteOne({ _id: id });
+      await Location.deleteMany({
+        visibility: "private",
+        userid: id,
+      });
+      await AuthIdentity.deleteMany({ user: id });
+      await User.findByIdAndDelete(id);
     } catch (error) {
       console.log("bad id");
     }
   },
 
   async deleteAll() {
+    await AuthIdentity.deleteMany({});
     await User.deleteMany({});
   },
 };

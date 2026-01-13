@@ -22,7 +22,8 @@ suite("User Model tests", () => {
 
   test("create a user", async () => {
     const newUser = await db.userStore.addUser(john);
-    assertSubset(john, newUser);
+    const { password, ...johnWithoutPassword } = john;
+    assertSubset(johnWithoutPassword, newUser);
   });
 
   test("delete all users", async () => {
