@@ -2,11 +2,21 @@
   <div class="container">
     <div class="navbar-brand">
       {{> placemark-brand}}
+
+      <a role="button"
+        class="navbar-burger"
+        aria-label="menu"
+        aria-expanded="false"
+        data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
     </div>
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-end">
         <div class="navbar-item">
-          <div class="buttons">
+          <div class="buttons is-centered">
             <a class="button is-dark" id="auth-github" href="/auth/github">
               <span class="icon"><i class="fab fa-github"></i></span>
               <span>Login with GitHub</span>
@@ -19,3 +29,20 @@
     </div>
   </div>
 </nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const burgers = document.querySelectorAll('.navbar-burger');
+
+  burgers.forEach(burger => {
+    burger.addEventListener('click', () => {
+      const targetId = burger.dataset.target;
+      const target = document.getElementById(targetId);
+
+      burger.classList.toggle('is-active');
+      target.classList.toggle('is-active');
+    });
+  });
+});
+</script>
+

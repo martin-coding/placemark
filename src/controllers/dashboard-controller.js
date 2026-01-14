@@ -45,7 +45,7 @@ export const dashboardController = {
     handler: async function (request, h) {
       const location = await db.locationStore.getLocationById(request.params.id);
       const loggedInUser = request.auth.credentials;
-      if (location.userid.toString() !== loggedInUser._id.toString() && !loggedInUser.isAdmin) {
+      if (location.userid?.toString() !== loggedInUser._id.toString() && !loggedInUser.isAdmin) {
         return h.response("403 Forbidden").code(403);
       }
       await db.locationStore.deleteLocationById(location._id);

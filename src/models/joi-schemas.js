@@ -22,6 +22,8 @@ export const UserSpecPlus = UserSpec.keys({
   password: Joi.forbidden(),
   _id: IdSpec,
   __v: Joi.number(),
+  lastName: Joi.optional(),
+  email: Joi.optional(),
   emailVerified: Joi.boolean(),
   isAdmin: Joi.boolean(),
   createdAt: Joi.date().iso(),
@@ -47,6 +49,7 @@ export const LocationSpec = Joi.object()
     userid: IdSpec,
     category: Joi.string().example("waterfall"),
     visibility: Joi.string().example("public"),
+    img: Joi.string().example("http://res.cloudinary.com/dqojoxgov/image/upload/v1768387566/exj9tcnich2px2xwkzed.jpg"),
   })
   .label("Location");
 

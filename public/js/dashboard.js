@@ -1,8 +1,20 @@
-const locations = JSON.parse(document.getElementById("map").dataset.locations);
+const locations = JSON.parse(document.getElementById("main-map").dataset.locations);
 
-const map = L.map("map", {
+const map = L.map("main-map", {
   center: [64.963, -19.02],
   zoom: 7,
+});
+
+const detailMap = L.map("detail-map", {
+  center: [64.963, -19.02],
+  zoom: 6,
+  zoomControl: false,
+  attributionControl: false,
+  dragging: true,
+  scrollWheelZoom: true,
+  doubleClickZoom: true,
+  boxZoom: false,
+  keyboard: false,
 });
 
 const terrain = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "© OpenStreetMap contributors" });
@@ -11,6 +23,9 @@ const satellite = L.tileLayer("https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z
   subdomains: ["mt0", "mt1", "mt2", "mt3"],
   attribution: "© Google",
 });
+
+terrain.addTo(map);
+satellite.addTo(detailMap);
 
 const privateIcon = L.icon({
   iconUrl: "/images/marker-private.png",
@@ -30,8 +45,6 @@ const newLocationIcon = L.icon({
   shadowSize: [41, 41],
 });
 
-terrain.addTo(map);
-
 const categoryLayers = {
   waterfall: L.layerGroup(),
   beach: L.layerGroup(),
@@ -42,6 +55,54 @@ const categoryLayers = {
 
 const bounds = [];
 
+let detailMarker = null;
+let newMarker = null;
+let placementMode = false;
+
+function popupHtml(marker) {
+  const { lat, lng } = marker.getLatLng();
+
+  return `
+      <strong>New location</strong><br>
+      Lat: ${lat.toFixed(5)}<br>
+      Lng: ${lng.toFixed(5)}<br>
+      <br>
+      <button id="save-marker" class="button is-primary is-small">Create</button>
+      <button id="cancel-marker" class="button is-danger is-small ml-2">
+        Cancel
+      </button>
+    `;
+}
+
+function showInDetailMap(lat, lng) {
+  const zoomLevel = 16; // nice close satellite zoom
+
+  detailMap.setView([lat, lng], zoomLevel, {
+    animate: true,
+    duration: 0.5,
+  });
+
+  if (detailMarker) {
+    detailMarker.setLatLng([lat, lng]);
+  } else {
+    detailMarker = L.marker([lat, lng]).addTo(detailMap);
+  }
+}
+
+function updatePoiDetails(loc) {
+  const panel = document.getElementById("poi-details");
+
+  panel.innerHTML = `
+    <strong>${loc.title}</strong><br>
+    Category: ${loc.category}<br>
+    Visibility: ${loc.visibility}<br>
+    <br>
+    <a class="button is-small is-link" href="/location/${loc._id}">
+      Open details
+    </a>
+  `;
+}
+
 locations.forEach((loc) => {
   const markerOptions = {};
 
@@ -49,11 +110,18 @@ locations.forEach((loc) => {
     markerOptions.icon = privateIcon;
   }
 
-  const marker = L.marker([loc.latitude, loc.longitude], markerOptions).bindPopup(`
+  const marker = L.marker([loc.latitude, loc.longitude], markerOptions)
+    .bindPopup(
+      `
       <strong><a href="/location/${loc._id}">${loc.title}</a></strong><br>
       <em>${loc.category}</em><br>
       ${loc.visibility}
-    `);
+    `
+    )
+    .on("click", () => {
+      showInDetailMap(loc.latitude, loc.longitude);
+      updatePoiDetails(loc); // optional, see below
+    });
 
   if (categoryLayers[loc.category]) {
     marker.addTo(categoryLayers[loc.category]);
@@ -90,9 +158,6 @@ const overlayMaps = {
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-let newMarker = null;
-let placementMode = false;
-
 const PlaceControl = L.Control.extend({
   options: { position: "topright" },
 
@@ -113,21 +178,6 @@ const PlaceControl = L.Control.extend({
 });
 
 map.addControl(new PlaceControl());
-
-function popupHtml(marker) {
-  const { lat, lng } = marker.getLatLng();
-
-  return `
-      <strong>New location</strong><br>
-      Lat: ${lat.toFixed(5)}<br>
-      Lng: ${lng.toFixed(5)}<br>
-      <br>
-      <button id="save-marker" class="button is-primary is-small">Create</button>
-      <button id="cancel-marker" class="button is-danger is-small ml-2">
-        Cancel
-      </button>
-    `;
-}
 
 map.on("click", (e) => {
   if (!placementMode) return;
