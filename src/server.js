@@ -15,6 +15,7 @@ import { accountsController } from "./controllers/accounts-controller.js";
 import { webRoutes } from "./web-routes.js";
 import { db } from "./models/db.js";
 import { apiRoutes } from "./api-routes.js";
+import config from "./config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,8 +71,16 @@ const swaggerOptions = {
 
 async function init() {
   const server = Hapi.server({
-    port: process.env.PORT || 3000,
+    port: config.server.port,
+    host: config.server.host
   });
+
+  if (config.isProd) {
+    server.settings.app = server.settings.app || {};
+    server.settings.app.proxy = true;
+  }
+
+  server.info.uri = config.server.uri;
 
   await server.register(Bell);
   await server.register(Cookie);
@@ -104,7 +113,7 @@ async function init() {
     cookie: {
       name: process.env.COOKIE_NAME,
       password: process.env.COOKIE_PASSWORD,
-      isSecure: false,
+      isSecure: config.cookies.isSecure,
       path: "/",
     },
     redirectTo: "/",
@@ -121,7 +130,7 @@ async function init() {
     password: process.env.COOKIE_PASSWORD,
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    isSecure: true,
+    isSecure: config.cookies.isSecure,
   });
 
   db.init("mongo");
