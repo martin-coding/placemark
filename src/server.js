@@ -56,7 +56,7 @@ Handlebars.registerHelper("json", (context) => JSON.stringify(context)
     .replace(/\u2029/g, "\\u2029"));
 
 const swaggerOptions = {
-  schemes: isProd ? ['https'] : ['http'],
+  schemes: isProd ? ["https"] : ["http"],
   info: {
     title: "Placemark API",
     version: "0.1",
@@ -78,9 +78,9 @@ async function init() {
     port: process.env.PORT || 3000,
     host: isProd ? "0.0.0.0" : "localhost",
     routes: {
-      cors: true
+      cors: true,
     },
-    tls: false
+    tls: false,
   });
 
   server.events.on("request", (request, event) => {

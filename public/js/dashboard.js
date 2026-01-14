@@ -24,6 +24,9 @@ const satellite = L.tileLayer("https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z
   attribution: "© Google",
 });
 
+terrain.addTo(map);
+satellite.addTo(detailMap);
+
 const privateIcon = L.icon({
   iconUrl: "/images/marker-private.png",
   iconSize: [25, 41],
@@ -42,9 +45,6 @@ const newLocationIcon = L.icon({
   shadowSize: [41, 41],
 });
 
-terrain.addTo(map);
-satellite.addTo(detailMap);
-
 const categoryLayers = {
   waterfall: L.layerGroup(),
   beach: L.layerGroup(),
@@ -55,84 +55,9 @@ const categoryLayers = {
 
 const bounds = [];
 
-locations.forEach((loc) => {
-  const markerOptions = {};
-
-  if (loc.visibility === "private") {
-    markerOptions.icon = privateIcon;
-  }
-
-  const marker = L.marker([loc.latitude, loc.longitude], markerOptions)
-    .bindPopup(`
-      <strong><a href="/location/${loc._id}">${loc.title}</a></strong><br>
-      <em>${loc.category}</em><br>
-      ${loc.visibility}
-    `)
-    .on("click", () => {
-      showInDetailMap(loc.latitude, loc.longitude);
-      updatePoiDetails(loc); // optional, see below
-    });
-
-
-  if (categoryLayers[loc.category]) {
-    marker.addTo(categoryLayers[loc.category]);
-  } else {
-    marker.addTo(categoryLayers.uncategorized);
-  }
-
-  bounds.push([loc.latitude, loc.longitude]);
-});
-
-Object.values(categoryLayers).forEach((layer) => layer.addTo(map));
-
-// Because nothing forces you to place POIs in iceland
-if (bounds.length) {
-  const markerBounds = L.latLngBounds(bounds);
-
-  if (!map.getBounds().contains(markerBounds)) {
-    map.fitBounds(markerBounds);
-  }
-}
-
-const baseMaps = {
-  Terrain: terrain,
-  Satellite: satellite,
-};
-
-const overlayMaps = {
-  Waterfalls: categoryLayers.waterfall,
-  Beaches: categoryLayers.beach,
-  Glaciers: categoryLayers.glacier,
-  "Hot Springs": categoryLayers["hot-spring"],
-  Uncategorized: categoryLayers.uncategorized,
-};
-
-L.control.layers(baseMaps, overlayMaps).addTo(map);
-
 let detailMarker = null;
 let newMarker = null;
 let placementMode = false;
-
-const PlaceControl = L.Control.extend({
-  options: { position: "topright" },
-
-  onAdd() {
-    const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
-    div.innerHTML = `
-        <button id="toggle-placement"
-          title="Toggle placement mode"
-          style="background:#fff;padding:6px 10px;border:none;cursor:pointer">
-          📍 Place
-        </button>
-      `;
-
-    L.DomEvent.disableClickPropagation(div);
-
-    return div;
-  },
-});
-
-map.addControl(new PlaceControl());
 
 function popupHtml(marker) {
   const { lat, lng } = marker.getLatLng();
@@ -178,6 +103,81 @@ function updatePoiDetails(loc) {
   `;
 }
 
+locations.forEach((loc) => {
+  const markerOptions = {};
+
+  if (loc.visibility === "private") {
+    markerOptions.icon = privateIcon;
+  }
+
+  const marker = L.marker([loc.latitude, loc.longitude], markerOptions)
+    .bindPopup(
+      `
+      <strong><a href="/location/${loc._id}">${loc.title}</a></strong><br>
+      <em>${loc.category}</em><br>
+      ${loc.visibility}
+    `
+    )
+    .on("click", () => {
+      showInDetailMap(loc.latitude, loc.longitude);
+      updatePoiDetails(loc); // optional, see below
+    });
+
+  if (categoryLayers[loc.category]) {
+    marker.addTo(categoryLayers[loc.category]);
+  } else {
+    marker.addTo(categoryLayers.uncategorized);
+  }
+
+  bounds.push([loc.latitude, loc.longitude]);
+});
+
+Object.values(categoryLayers).forEach((layer) => layer.addTo(map));
+
+// Because nothing forces you to place POIs in iceland
+if (bounds.length) {
+  const markerBounds = L.latLngBounds(bounds);
+
+  if (!map.getBounds().contains(markerBounds)) {
+    map.fitBounds(markerBounds);
+  }
+}
+
+const baseMaps = {
+  Terrain: terrain,
+  Satellite: satellite,
+};
+
+const overlayMaps = {
+  Waterfalls: categoryLayers.waterfall,
+  Beaches: categoryLayers.beach,
+  Glaciers: categoryLayers.glacier,
+  "Hot Springs": categoryLayers["hot-spring"],
+  Uncategorized: categoryLayers.uncategorized,
+};
+
+L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+const PlaceControl = L.Control.extend({
+  options: { position: "topright" },
+
+  onAdd() {
+    const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+    div.innerHTML = `
+        <button id="toggle-placement"
+          title="Toggle placement mode"
+          style="background:#fff;padding:6px 10px;border:none;cursor:pointer">
+          📍 Place
+        </button>
+      `;
+
+    L.DomEvent.disableClickPropagation(div);
+
+    return div;
+  },
+});
+
+map.addControl(new PlaceControl());
 
 map.on("click", (e) => {
   if (!placementMode) return;
