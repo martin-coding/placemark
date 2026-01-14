@@ -104,7 +104,7 @@ async function init() {
     cookie: {
       name: process.env.COOKIE_NAME,
       password: process.env.COOKIE_PASSWORD,
-      isSecure: false,
+      isSecure: true,
       path: "/",
     },
     redirectTo: "/",
@@ -121,7 +121,7 @@ async function init() {
     password: process.env.COOKIE_PASSWORD,
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    isSecure: false,
+    isSecure: true,
   });
 
   db.init("mongo");

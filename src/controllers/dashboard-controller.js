@@ -23,7 +23,7 @@ export const dashboardController = {
       failAction: async function (request, h, error) {
         const loggedInUser = request.auth.credentials;
         const locations = await db.locationStore.getUserLocations(loggedInUser._id);
-        return h.view("dashboard-view", { title: "Add Location error", locations: locations, errors: error.details }).takeover().code(400);
+        return h.view("location-form", { title: "Add Location error", locations: locations, errors: error.details }).takeover().code(400);
       },
     },
     handler: async function (request, h) {
