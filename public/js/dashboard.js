@@ -1,8 +1,20 @@
-const locations = JSON.parse(document.getElementById("map").dataset.locations);
+const locations = JSON.parse(document.getElementById("main-map").dataset.locations);
 
-const map = L.map("map", {
+const map = L.map("main-map", {
   center: [64.963, -19.02],
   zoom: 7,
+});
+
+const detailMap = L.map("detail-map", {
+  center: [64.963, -19.02],
+  zoom: 6,
+  zoomControl: false,
+  attributionControl: false,
+  dragging: true,
+  scrollWheelZoom: true,
+  doubleClickZoom: true,
+  boxZoom: false,
+  keyboard: false,
 });
 
 const terrain = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "© OpenStreetMap contributors" });
@@ -31,6 +43,7 @@ const newLocationIcon = L.icon({
 });
 
 terrain.addTo(map);
+satellite.addTo(detailMap);
 
 const categoryLayers = {
   waterfall: L.layerGroup(),
@@ -49,11 +62,17 @@ locations.forEach((loc) => {
     markerOptions.icon = privateIcon;
   }
 
-  const marker = L.marker([loc.latitude, loc.longitude], markerOptions).bindPopup(`
+  const marker = L.marker([loc.latitude, loc.longitude], markerOptions)
+    .bindPopup(`
       <strong><a href="/location/${loc._id}">${loc.title}</a></strong><br>
       <em>${loc.category}</em><br>
       ${loc.visibility}
-    `);
+    `)
+    .on("click", () => {
+      showInDetailMap(loc.latitude, loc.longitude);
+      updatePoiDetails(loc); // optional, see below
+    });
+
 
   if (categoryLayers[loc.category]) {
     marker.addTo(categoryLayers[loc.category]);
@@ -90,6 +109,7 @@ const overlayMaps = {
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
+let detailMarker = null;
 let newMarker = null;
 let placementMode = false;
 
@@ -128,6 +148,36 @@ function popupHtml(marker) {
       </button>
     `;
 }
+
+function showInDetailMap(lat, lng) {
+  const zoomLevel = 16; // nice close satellite zoom
+
+  detailMap.setView([lat, lng], zoomLevel, {
+    animate: true,
+    duration: 0.5,
+  });
+
+  if (detailMarker) {
+    detailMarker.setLatLng([lat, lng]);
+  } else {
+    detailMarker = L.marker([lat, lng]).addTo(detailMap);
+  }
+}
+
+function updatePoiDetails(loc) {
+  const panel = document.getElementById("poi-details");
+
+  panel.innerHTML = `
+    <strong>${loc.title}</strong><br>
+    Category: ${loc.category}<br>
+    Visibility: ${loc.visibility}<br>
+    <br>
+    <a class="button is-small is-link" href="/location/${loc._id}">
+      Open details
+    </a>
+  `;
+}
+
 
 map.on("click", (e) => {
   if (!placementMode) return;

@@ -25,6 +25,8 @@ if (result.error) {
   // process.exit(1);
 }
 
+const isProd = process.env.NODE_ENV === "production";
+
 Handlebars.registerHelper("eq", (a, b) => a === b);
 Handlebars.registerHelper("neq", (a, b) => String(a) !== String(b));
 Handlebars.registerHelper("formatDate", (date) => {
@@ -54,6 +56,7 @@ Handlebars.registerHelper("json", (context) => JSON.stringify(context)
     .replace(/\u2029/g, "\\u2029"));
 
 const swaggerOptions = {
+  schemes: isProd ? ['https'] : ['http'],
   info: {
     title: "Placemark API",
     version: "0.1",
@@ -69,7 +72,6 @@ const swaggerOptions = {
 };
 
 async function init() {
-  const isProd = process.env.NODE_ENV === "production";
   const uri = isProd ? "https://placemark-l3cr.onrender.com" : "http://localhost:3000";
 
   const server = Hapi.server({

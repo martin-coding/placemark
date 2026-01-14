@@ -9,7 +9,7 @@ export const locationController = {
       if (!location) {
         return h.view("404", { title: "Not found", user: loggedInUser }).code(404);
       }
-      if (location.visibility === "private" && loggedInUser._id.toString() !== location.userid.toString()) {
+      if (location.visibility === "private" && loggedInUser._id.toString() !== location.userid?.toString()) {
         return h.view("404", { title: "Not found", user: loggedInUser }).code(404);
       }
       const reviews = await db.reviewStore.getReviewsFromLocation(location._id);
@@ -38,7 +38,7 @@ export const locationController = {
         const loggedInUser = request.auth.credentials;
         const location = await db.locationStore.getLocationById(request.params.id);
         const file = request.payload.imagefile;
-        if (location.userid.toString() !== loggedInUser._id.toString() && !loggedInUser.isAdmin) {
+        if (location.userid?.toString() !== loggedInUser._id.toString() && !loggedInUser.isAdmin) {
           return h.redirect(`/location/${location._id}`);
         }
         if (Object.keys(file).length > 0) {

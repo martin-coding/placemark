@@ -35,7 +35,7 @@ export const seedData = {
       description: "A large glacial lake in southern part of Vatnajökull National Park, the deepest in Iceland.",
       category: "glacier",
       visibility: "public",
-      img: "http://res.cloudinary.com/dqojoxgov/image/upload/v1768336394/y1or9mayxydyaknrq3ol.jpg",
+      img: "http://res.cloudinary.com/dqojoxgov/image/upload/v1768414301/t8n7qwooxyxhg45elfw9.jpg",
     },
     location_5: {
       title: "Reynisfjara",

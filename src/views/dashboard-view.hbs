@@ -1,11 +1,49 @@
 {{> menu active="dashboard"}}
 
-<section>
-  <div
-    id="map"
-    data-locations='{{json locations}}'
-    style="height: calc(100vh - 3.25rem);">
+<section class="section p-0">
+  <div class="columns is-gapless" style="height: calc(100vh - 3.25rem);">
+
+    <!-- Main Map -->
+    <div class="column is-9" style="position: relative;">
+      <div
+        id="main-map"
+        data-locations='{{json locations}}'
+        style="height: 100%; width: 100%;">
+      </div>
+    </div>
+
+    <!-- Side Panel -->
+    <div class="column is-3" style="display: flex; flex-direction: column;">
+
+      <!-- Detail Map -->
+      <div style="flex: 0 0 50%; border-bottom: 1px solid #ddd;">
+        <div
+          id="detail-map"
+          style="height: 100%; width: 100%;">
+        </div>
+      </div>
+
+      <!-- POI Details Panel -->
+      <div style="flex: 1; overflow-y: auto;" class="p-3">
+
+        <h3 class="title is-6">Selected POI</h3>
+
+        <div id="poi-details">
+          <p class="has-text-grey">No POI selected</p>
+
+          <!-- You can dynamically fill this with JS -->
+          <!-- Example:
+          <strong>Name:</strong> <span id="poi-name"></span><br>
+          <strong>Category:</strong> <span id="poi-category"></span><br>
+          <strong>Description:</strong> <span id="poi-desc"></span>
+          -->
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </section>
+
 
 <script src="/js/dashboard.js"></script>
