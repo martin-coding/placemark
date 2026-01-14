@@ -4,11 +4,13 @@ import { connectMongo } from "./mongo/connect.js";
 import { userMongoStore } from "./mongo/user-mongo-store.js";
 import { authMongoStore } from "./mongo/auth-mongo-store.js";
 import { locationMongoStore } from "./mongo/location-mongo-store.js";
+import { reviewMongoStore } from "./mongo/review-mongo-store.js";
 
 export const db = {
   userStore: null,
   locationStore: null,
   authStore: null,
+  reviewStore: null,
 
   init(storeType) {
     switch (storeType) {
@@ -16,6 +18,7 @@ export const db = {
         this.userStore = userMongoStore;
         this.locationStore = locationMongoStore;
         this.authStore = authMongoStore;
+        this.reviewStore = reviewMongoStore;
         connectMongo();
         break;
       default:

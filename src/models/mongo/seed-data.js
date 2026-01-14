@@ -8,6 +8,7 @@ export const seedData = {
       description: "With a flow rate of 360 m³/s, it has the highest average water flow of any waterfall in Iceland.",
       category: "waterfall",
       visibility: "public",
+      img: "http://res.cloudinary.com/dqojoxgov/image/upload/v1768386737/x1ucxjm3tzjqg0ridmbs.jpg",
     },
     location_2: {
       title: "Seljalandsfoss",
@@ -16,6 +17,7 @@ export const seedData = {
       description: "The waterfall drops 60 m (197 ft) and is part of the Seljalands River.",
       category: "waterfall",
       visibility: "public",
+      img: "http://res.cloudinary.com/dqojoxgov/image/upload/v1768387566/exj9tcnich2px2xwkzed.jpg",
     },
     location_3: {
       title: "Skógafoss",
@@ -24,6 +26,7 @@ export const seedData = {
       description: "Skógafoss is one of the biggest waterfalls in the country, with a width of 25 metres and a drop of 60 m.",
       category: "waterfall",
       visibility: "public",
+      img: "http://res.cloudinary.com/dqojoxgov/image/upload/v1768386706/blo18fbi0l2n9rm7ioom.jpg",
     },
     location_4: {
       title: "Jökulsárlón",
@@ -32,6 +35,7 @@ export const seedData = {
       description: "A large glacial lake in southern part of Vatnajökull National Park, the deepest in Iceland.",
       category: "glacier",
       visibility: "public",
+      img: "http://res.cloudinary.com/dqojoxgov/image/upload/v1768336394/y1or9mayxydyaknrq3ol.jpg",
     },
     location_5: {
       title: "Reynisfjara",
@@ -40,14 +44,17 @@ export const seedData = {
       description: "A popular black sand beach in southern Iceland near the town of Vík í Mýrdal.",
       category: "beach",
       visibility: "public",
+      img: "http://res.cloudinary.com/dqojoxgov/image/upload/v1768388239/uquq2mhhn15f2m9fyeoj.jpg",
     },
     location_6: {
       title: "Diamond Beach",
       latitude: 64.0437,
       longitude: -16.1963,
-      description: "Eindrucksvoller schwarzer Sandstrand mit angespülten großen, glitzernden Eisbergfragmenten.",
+      description:
+        "Diamond Beach, also known as Fellsfjara, is a stunning black sand beach in Iceland located near Jökulsárlón Glacier Lagoon. It features beautiful icebergs that have drifted ashore from the Breiðamerkurjökull glacier, creating a unique and picturesque landscape.",
       category: "beach",
       visibility: "public",
+      img: "http://res.cloudinary.com/dqojoxgov/image/upload/v1768387754/olclbpzwn27lbvl3d3lt.jpg",
     },
     location_7: {
       title: "Reykjadalur",
@@ -56,6 +63,7 @@ export const seedData = {
       description: "Hot water",
       category: "hot-spring",
       visibility: "public",
+      img: "http://res.cloudinary.com/dqojoxgov/image/upload/v1768389165/cxim0jro13mskxmrubwc.jpg",
     },
   },
 };

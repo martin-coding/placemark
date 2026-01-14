@@ -10,7 +10,7 @@ export const dashboardController = {
       const viewData = {
         title: "Placemark Dashboard",
         user: loggedInUser,
-        locations: JSON.stringify(locations),
+        locations: locations,
       };
       return h.view("dashboard-view", viewData);
     },
@@ -23,7 +23,7 @@ export const dashboardController = {
       failAction: async function (request, h, error) {
         const loggedInUser = request.auth.credentials;
         const locations = await db.locationStore.getUserLocations(loggedInUser._id);
-        return h.view("dashboard-view", { title: "Add Location error", locations: locations, errors: error.details }).takeover().code(400);
+        return h.view("location-form", { title: "Add Location error", locations: locations, errors: error.details }).takeover().code(400);
       },
     },
     handler: async function (request, h) {
@@ -44,7 +44,8 @@ export const dashboardController = {
   deleteLocation: {
     handler: async function (request, h) {
       const location = await db.locationStore.getLocationById(request.params.id);
-      if (location.userid.toString() !== request.auth.credentials._id.toString()) {
+      const loggedInUser = request.auth.credentials;
+      if (location.userid.toString() !== loggedInUser._id.toString() && !loggedInUser.isAdmin) {
         return h.response("403 Forbidden").code(403);
       }
       await db.locationStore.deleteLocationById(location._id);

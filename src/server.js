@@ -26,6 +26,32 @@ if (result.error) {
 }
 
 Handlebars.registerHelper("eq", (a, b) => a === b);
+Handlebars.registerHelper("neq", (a, b) => String(a) !== String(b));
+Handlebars.registerHelper("formatDate", (date) => {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-IE", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+});
+Handlebars.registerHelper("stars", (rating) => {
+  let html = "";
+  for (let i = 1; i <= 5; i += 1) {
+    if (i <= rating) {
+      html += "<i class=\"fas fa-star\"></i>";
+    } else {
+      html += "<i class=\"far fa-star\"></i>";
+    }
+  }
+  return new Handlebars.SafeString(html);
+});
+Handlebars.registerHelper("json", (context) => JSON.stringify(context)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026")
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029"));
 
 const swaggerOptions = {
   info: {
@@ -95,7 +121,7 @@ async function init() {
     password: process.env.COOKIE_PASSWORD,
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    isSecure: false,
+    isSecure: true,
   });
 
   db.init("mongo");
