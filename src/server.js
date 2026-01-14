@@ -81,6 +81,12 @@ async function init() {
     tls: false
   });
 
+  server.events.on("request", (request, event) => {
+    if (event.error) {
+      console.error(event.error);
+    }
+  });
+
   server.ext("onRequest", (request, h) => {
     request.headers["x-forwarded-proto"] = "https";
     return h.continue;
@@ -163,12 +169,6 @@ process.on("unhandledRejection", (err) => {
 
 process.on("uncaughtException", (err) => {
   console.error("UNCAUGHT", err);
-});
-
-server.events.on("request", (request, event) => {
-  if (event.error) {
-    console.error(event.error);
-  }
 });
 
 init();
