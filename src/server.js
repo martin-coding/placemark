@@ -118,7 +118,6 @@ async function init() {
       name: process.env.COOKIE_NAME,
       password: process.env.COOKIE_PASSWORD,
       isSecure: isProd,
-      isSameSite: 'Lax',
       path: "/",
     },
     redirectTo: "/",
@@ -136,7 +135,6 @@ async function init() {
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
     isSecure: isProd,
-    isSameSite: 'Lax',
   });
 
   db.init("mongo");
@@ -165,6 +163,12 @@ process.on("unhandledRejection", (err) => {
 
 process.on("uncaughtException", (err) => {
   console.error("UNCAUGHT", err);
+});
+
+server.events.on("request", (request, event) => {
+  if (event.error) {
+    console.error(event.error);
+  }
 });
 
 init();
