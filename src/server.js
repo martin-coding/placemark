@@ -75,9 +75,16 @@ async function init() {
   const server = Hapi.server({
     port: process.env.PORT || 3000,
     host: isProd ? "0.0.0.0" : "localhost",
+    routes: {
+      cors: true
+    },
+    tls: false
   });
 
-  server.info.uri = uri;
+  server.ext('onRequest', (request, h) => {
+    request.headers['x-forwarded-proto'] = 'https';
+    return h.continue;
+  });
 
   await server.register(Bell);
   await server.register(Cookie);
@@ -127,7 +134,8 @@ async function init() {
     password: process.env.COOKIE_PASSWORD,
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    isSecure: false,
+    isSecure: isProd,
+    location: uri,
   });
 
   db.init("mongo");
