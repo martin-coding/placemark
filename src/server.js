@@ -81,8 +81,8 @@ async function init() {
     tls: false
   });
 
-  server.ext('onRequest', (request, h) => {
-    request.headers['x-forwarded-proto'] = 'https';
+  server.ext("onRequest", (request, h) => {
+    request.headers["x-forwarded-proto"] = "https";
     return h.continue;
   });
 
@@ -117,7 +117,8 @@ async function init() {
     cookie: {
       name: process.env.COOKIE_NAME,
       password: process.env.COOKIE_PASSWORD,
-      isSecure: false,
+      isSecure: isProd,
+      isSameSite: 'Lax',
       path: "/",
     },
     redirectTo: "/",
@@ -135,7 +136,9 @@ async function init() {
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
     isSecure: isProd,
-    location: uri,
+    cookie: {
+      isSameSite: 'Lax'
+    }
   });
 
   db.init("mongo");
@@ -158,8 +161,12 @@ async function init() {
 }
 
 process.on("unhandledRejection", (err) => {
-  console.log(err);
+  console.error("UNHANDLED", err);
   process.exit(1);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("UNCAUGHT", err);
 });
 
 init();
