@@ -15,7 +15,6 @@ import { accountsController } from "./controllers/accounts-controller.js";
 import { webRoutes } from "./web-routes.js";
 import { db } from "./models/db.js";
 import { apiRoutes } from "./api-routes.js";
-import config from "./config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,17 +69,15 @@ const swaggerOptions = {
 };
 
 async function init() {
+  const isProd = process.env.NODE_ENV === "production";
+  const uri = isProd ? "https://placemark-l3cr.onrender.com" : "http://localhost:3000";
+
   const server = Hapi.server({
-    port: config.server.port,
-    host: config.server.host
+    port: process.env.PORT || 3000,
+    host: isProd ? "0.0.0.0" : "localhost",
   });
 
-  if (config.isProd) {
-    server.settings.app = server.settings.app || {};
-    server.settings.app.proxy = true;
-  }
-
-  server.info.uri = config.server.uri;
+  server.info.uri = uri;
 
   await server.register(Bell);
   await server.register(Cookie);
@@ -113,7 +110,7 @@ async function init() {
     cookie: {
       name: process.env.COOKIE_NAME,
       password: process.env.COOKIE_PASSWORD,
-      isSecure: config.cookies.isSecure,
+      isSecure: false,
       path: "/",
     },
     redirectTo: "/",
@@ -130,7 +127,7 @@ async function init() {
     password: process.env.COOKIE_PASSWORD,
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    isSecure: config.cookies.isSecure,
+    isSecure: false,
   });
 
   db.init("mongo");
@@ -147,6 +144,7 @@ async function init() {
       },
     },
   });
+  console.log("My uri is %s", uri);
   await server.start();
   console.log("Server running on %s", server.info.uri);
 }
