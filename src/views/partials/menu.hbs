@@ -1,16 +1,18 @@
-<nav class="navbar">
-  <div class="navbar-brand">
-    {{> placemark-brand}}
-  </div>
-  <div class="navbar-menu" id="navMenu">
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <a id="dashboard" class="button {{#if (eq active 'dashboard')}}is-primary{{/if}}" href="/dashboard"> Dashboard </a>
-          {{#if user.isAdmin}}
-            <a id="admin" class="button {{#if (eq active 'admin')}}is-primary{{/if}}" href="/admin"> Admin </a>
-          {{/if}}
-          <a id="logout" class="button" href="/logout"> Logout </a>
+<nav class="navbar is-fixed-top">
+  <div class="container">
+    <div class="navbar-brand">
+      {{> placemark-brand}}
+    </div>
+    <div class="navbar-menu" id="navMenu">
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a id="dashboard" class="button {{#if (eq active 'dashboard')}}is-primary{{/if}}" href="/dashboard"> Dashboard </a>
+            {{#if user.isAdmin}}
+              <a id="admin" class="button {{#if (eq active 'admin')}}is-primary{{/if}}" href="/admin"> Admin </a>
+            {{/if}}
+            <a id="logout" class="button" href="/logout"> Logout </a>
+          </div>
         </div>
       </div>
     </div>

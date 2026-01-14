@@ -1,18 +1,31 @@
 {{> menu}}
 
-<section class="section">
+<section class="section has-background-light">
   <div class="container">
 
-    <!-- Title Header -->
-    <div class="box">
-      <h1 class="title is-3">{{location.title}}</h1>
-      <p class="subtitle is-6 has-text-grey">{{location.category}} · {{location.visibility}}</p>
+    <div class="box level">
+      <div class="level-left">
+        <div>
+          <h1 class="title is-3">{{location.title}}</h1>
+          <p class="subtitle is-6 has-text-grey">{{location.category}} · {{location.visibility}}</p>
+        </div>
+      </div>
+      {{#if false}}
+      <div class="level-right">
+        <div class="buttons">
+          <button class="button is-warning" onclick="toggleEdit()">
+            <span class="icon">
+              <i class="far fa-edit"></i>
+            </span>
+            <span>Edit</span>
+          </button>
+        </div>
+      </div>
+      {{/if}}
     </div>
 
-    <!-- Main Content -->
     <div class="columns">
 
-      <!-- Image Column -->
       <div class="column is-5">
         <div class="card">
 
@@ -30,7 +43,7 @@
             </div>
           {{/if}}
 
-          {{#if user.isAdmin }}
+          {{#if canEdit }}
           <div class="card-content">
             <form action="/location/{{location._id}}/uploadimage" method="POST" enctype="multipart/form-data">
               <div class="file has-name is-fullwidth">
@@ -52,7 +65,6 @@
         </div>
       </div>
 
-      <!-- Info Column -->
       <div class="column is-7">
 
         <div class="columns">
@@ -78,63 +90,8 @@
       </div>
     </div>
 
-    {{#if userReview}}
-    <div class="box has-background-info-light">
-      <h2 class="title is-5">Your Review</h2>
+    {{> review-form}}
 
-      <form action="/location/{{location._id}}/review" method="POST">
-
-        <div class="field">
-          <label class="label">Rating</label>
-          <div class="select">
-            <select name="rating">
-              <option value="5" {{#if (eq userReview.rating 5)}}selected{{/if}}>⭐⭐⭐⭐⭐</option>
-              <option value="4" {{#if (eq userReview.rating 4)}}selected{{/if}}>⭐⭐⭐⭐</option>
-              <option value="3" {{#if (eq userReview.rating 3)}}selected{{/if}}>⭐⭐⭐</option>
-              <option value="2" {{#if (eq userReview.rating 2)}}selected{{/if}}>⭐⭐</option>
-              <option value="1" {{#if (eq userReview.rating 1)}}selected{{/if}}>⭐</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label">Comment</label>
-          <textarea class="textarea" name="comment">{{userReview.comment}}</textarea>
-        </div>
-
-        <button class="button is-success">💾 Update Review</button>
-      </form>
-    </div>
-    {{else}}
-    <div class="box">
-      <h2 class="title is-5">Add a Review</h2>
-
-      <form action="/location/{{location._id}}/review" method="POST">
-
-        <div class="field">
-          <label class="label">Rating</label>
-          <div class="select">
-            <select name="rating">
-              <option value="5">⭐⭐⭐⭐⭐</option>
-              <option value="4">⭐⭐⭐⭐</option>
-              <option value="3">⭐⭐⭐</option>
-              <option value="2">⭐⭐</option>
-              <option value="1">⭐</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label">Comment</label>
-          <textarea class="textarea" name="comment" placeholder="Write your review..."></textarea>
-        </div>
-
-        <button class="button is-primary">Submit Review</button>
-      </form>
-    </div>
-    {{/if}}
-
-    <!-- Reviews Section -->
     <div class="box">
       <h2 class="title is-5">Reviews</h2>
 
@@ -144,6 +101,20 @@
         <p class="has-text-grey">No reviews yet. Be the first to review this place.</p>
       {{/if}}
     </div>
+
+    {{#if canEdit}}
+    <form action="/dashboard/deletelocation/{{location._id}}" method="POST">
+      <button
+        type="submit"
+        class="button is-danger is-light"
+        onclick="return confirm('Are you sure you want to delete this location? This action cannot be undone.');">
+        <span class="icon">
+          <i class="fas fa-trash"></i>
+        </span>
+        <span>Delete Location</span>
+      </button>
+    </form>
+    {{/if}}
   </div>
 </section>
 

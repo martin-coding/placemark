@@ -19,12 +19,15 @@ export const locationController = {
         userReview = await db.reviewStore.getUserReviewForLocation(location._id, loggedInUser._id);
       }
 
+      const canEdit = location.userid?.toString() === loggedInUser._id.toString() || loggedInUser.isAdmin;
+
       const viewData = {
         title: "Location",
         location: location,
         user: loggedInUser,
         reviews: reviews,
         userReview,
+        canEdit,
       };
       return h.view("location-view", viewData);
     },
@@ -32,8 +35,12 @@ export const locationController = {
   uploadImage: {
     handler: async function (request, h) {
       try {
+        const loggedInUser = request.auth.credentials;
         const location = await db.locationStore.getLocationById(request.params.id);
         const file = request.payload.imagefile;
+        if (location.userid.toString() !== loggedInUser._id.toString() && !loggedInUser.isAdmin) {
+          return h.redirect(`/location/${location._id}`);
+        }
         if (Object.keys(file).length > 0) {
           const url = await imageStore.uploadImage(request.payload.imagefile);
           location.img = url;

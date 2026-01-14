@@ -1,17 +1,19 @@
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    {{> placemark-brand}}
-  </div>
-  <div id="navbarBasicExample" class="navbar-menu">
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <a class="button is-dark" id="auth-github" href="/auth/github">
-            <span class="icon"><i class="fab fa-github"></i></span>
-            <span>Login with GitHub</span>
-          </a>
-          <a class="button {{#if (eq active 'login')}}is-primary{{/if}}" id="login" href="/login"> Log in </a>
-          <a class="button {{#if (eq active 'signup')}}is-primary{{/if}}" id="signup" href="/signup"> Sign up </a>
+<nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      {{> placemark-brand}}
+    </div>
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-dark" id="auth-github" href="/auth/github">
+              <span class="icon"><i class="fab fa-github"></i></span>
+              <span>Login with GitHub</span>
+            </a>
+            <a class="button {{#if (eq active 'login')}}is-primary{{/if}}" id="login" href="/login"> Log in </a>
+            <a class="button {{#if (eq active 'signup')}}is-primary{{/if}}" id="signup" href="/signup"> Sign up </a>
+          </div>
         </div>
       </div>
     </div>

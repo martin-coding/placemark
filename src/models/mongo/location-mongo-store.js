@@ -1,5 +1,6 @@
 import Mongoose from "mongoose";
 import { Location } from "./location.js";
+import { Review } from "./review.js";
 
 export const locationMongoStore = {
   async getAllLocations() {
@@ -36,6 +37,7 @@ export const locationMongoStore = {
 
   async deleteLocationById(id) {
     try {
+      await Review.deleteMany({ locationid: id });
       await Location.deleteOne({ _id: id });
     } catch (error) {
       console.log("bad id");

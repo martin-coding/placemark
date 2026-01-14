@@ -1,5 +1,4 @@
-const mapEl = document.getElementById("map");
-const locations = JSON.parse(mapEl.dataset.locations);
+const locations = JSON.parse(document.getElementById("map").dataset.locations);
 
 const map = L.map("map", {
   center: [64.963, -19.02],
