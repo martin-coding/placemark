@@ -104,7 +104,7 @@ async function init() {
     cookie: {
       name: process.env.COOKIE_NAME,
       password: process.env.COOKIE_PASSWORD,
-      isSecure: true,
+      isSecure: false,
       path: "/",
     },
     redirectTo: "/",
