@@ -141,6 +141,7 @@ async function init() {
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
     isSecure: isProd,
+    location: uri,
   });
 
   db.init("mongo");
