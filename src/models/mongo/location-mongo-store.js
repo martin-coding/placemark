@@ -61,11 +61,7 @@ export const locationMongoStore = {
     if (longitude !== undefined) updateData.longitude = longitude;
     if (description !== undefined) updateData.description = description;
 
-    const updated = await Location.findByIdAndUpdate(
-      _id,
-      updateData,
-      { new: true, runValidators: true }
-    );
+    const updated = await Location.findByIdAndUpdate(_id, updateData, { new: true, runValidators: true });
 
     if (!updated) throw new Error("Location not found");
 

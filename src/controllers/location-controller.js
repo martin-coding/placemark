@@ -10,7 +10,7 @@ export const locationController = {
       const canEdit = location.userid?.toString() === loggedInUser._id.toString() || loggedInUser.isAdmin;
       const editMode = request.query.edit === "true";
 
-      if (!canEdit & editMode) {
+      if (!canEdit && editMode) {
         return h.redirect(`/location/${location._id}`);
       }
       if (!location) {
@@ -19,7 +19,6 @@ export const locationController = {
       if (location.visibility === "private" && loggedInUser._id.toString() !== location.userid?.toString()) {
         return h.view("404", { title: "Not found", user: loggedInUser }).code(404);
       }
-      
 
       let userReview = null;
       if (loggedInUser) {
