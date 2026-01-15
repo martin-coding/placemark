@@ -18,6 +18,7 @@ export const webRoutes = [
   { method: "POST", path: "/dashboard/deletelocation/{id}", config: dashboardController.deleteLocation },
 
   { method: "GET", path: "/location/{id}", config: locationController.index },
+  { method: "POST", path: "/location/{id}/update", config: locationController.update },
   { method: "POST", path: "/location/{id}/uploadimage", config: locationController.uploadImage },
   { method: "POST", path: "/location/{id}/review", config: locationController.review },
 

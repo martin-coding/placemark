@@ -48,6 +48,26 @@ export const locationMongoStore = {
     await Location.deleteMany({});
   },
 
+  async editLocation(updatedLocation) {
+    const { _id, title, category, visibility, latitude, longitude, description } = updatedLocation;
+
+    if (!_id) throw new Error("Location _id is required");
+
+    const updateData = {};
+    if (title !== undefined) updateData.title = title;
+    if (category !== undefined) updateData.category = category;
+    if (visibility !== undefined) updateData.visibility = visibility;
+    if (latitude !== undefined) updateData.latitude = latitude;
+    if (longitude !== undefined) updateData.longitude = longitude;
+    if (description !== undefined) updateData.description = description;
+
+    const updated = await Location.findByIdAndUpdate(_id, updateData, { new: true, runValidators: true });
+
+    if (!updated) throw new Error("Location not found");
+
+    return updated;
+  },
+
   async updateLocation(updatedLocation) {
     const location = await Location.findOne({ _id: updatedLocation._id });
     location.img = updatedLocation.img;

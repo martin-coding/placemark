@@ -6,19 +6,68 @@
     <div class="box level">
       <div class="level-left">
         <div>
-          <h1 class="title is-3">{{location.title}}</h1>
-          <p class="subtitle is-6 has-text-grey">{{location.category}} · {{location.visibility}}</p>
+
+          {{#if editMode}}
+            <input class="input is-large mb-2" name="title" value="{{location.title}}" form="edit-location-form">
+            <div class="field is-grouped">
+              <div class="control">
+                <div class="select is-fullwidth">
+                  <select name="category" form="edit-location-form">
+                    <option value="" disabled>Select Category</option>
+                    <option value="hot-spring" {{#if (eq location.category "hot-spring")}}selected{{/if}}>
+                      Hot spring
+                    </option>
+                    <option value="waterfall" {{#if (eq location.category "waterfall")}}selected{{/if}}>
+                      Waterfall
+                    </option>
+                    <option value="glacier" {{#if (eq location.category "glacier")}}selected{{/if}}>
+                      Glacier
+                    </option>
+                    <option value="beach" {{#if (eq location.category "beach")}}selected{{/if}}>
+                      Beach
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="control">
+                <div class="select is-fullwidth">
+                  <select name="visibility" form="edit-location-form">
+                    <option value="" disabled>Select Visibility</option>
+                    <option value="private" {{#if (eq location.visibility "private")}}selected{{/if}}>
+                      private
+                    </option>
+                    <option value="public" {{#if (eq location.visibility "public")}}selected{{/if}}>
+                      public
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          {{else}}
+            <h1 class="title is-3">{{location.title}}</h1>
+            <p class="subtitle is-6 has-text-grey">{{location.category}} · {{location.visibility}}</p>
+          {{/if}}
+
         </div>
       </div>
-      {{#if false}}
+
+      {{#if canEdit}}
       <div class="level-right">
         <div class="buttons">
-          <button class="button is-warning" onclick="toggleEdit()">
-            <span class="icon">
-              <i class="far fa-edit"></i>
-            </span>
-            <span>Edit</span>
-          </button>
+
+          {{#if editMode}}
+            <a href="/location/{{location._id}}" class="button is-danger is-outlined">Cancel</a>
+            <button class="button is-success" form="edit-location-form">
+              <span class="icon"><i class="fas fa-save"></i></span>
+              <span>Save</span>
+            </button>
+          {{else}}
+            <a href="/location/{{location._id}}?edit=true" class="button is-warning">
+              <span class="icon"><i class="far fa-edit"></i></span>
+              <span>Edit</span>
+            </a>
+          {{/if}}
+
         </div>
       </div>
       {{/if}}
@@ -29,21 +78,19 @@
       <div class="column is-5">
         <div class="card">
 
-          {{#if location.img}}
-            <div class="card-image">
-              <figure class="image is-4by3">
+          <div class="card-image">
+            <figure class="image is-4by3">
+              {{#if location.img}}
                 <img src="{{location.img}}" alt="{{location.title}}">
-              </figure>
-            </div>
-          {{else}}
-            <div class="card-image">
-              <figure class="image is-4by3">
-                <img src="https://bulma.io/images/placeholders/1280x960.png">
-              </figure>
-            </div>
-          {{/if}}
+              {{else}}
+                <div class="has-ratio is-flex is-align-items-center is-justify-content-center">
+                  <p>Upload image in edit mode</p>
+                </div>
+              {{/if}}
+            </figure>
+          </div>
 
-          {{#if canEdit }}
+          {{#if editMode}}
           <div class="card-content">
             <form action="/location/{{location._id}}/uploadimage" method="POST" enctype="multipart/form-data">
               <div class="file has-name is-fullwidth">
@@ -67,26 +114,51 @@
 
       <div class="column is-7">
 
-        <div class="columns">
-          <div class="column">
-            <div class="box">
-              <p class="heading">Latitude</p>
-              <p class="title is-6">{{location.latitude}}</p>
+        {{#if editMode}}
+        <form id="edit-location-form" action="/location/{{location._id}}/update" method="POST">
+        {{/if}}
+
+          <div class="columns">
+            <div class="column">
+              <div class="box">
+                <p class="heading">Latitude</p>
+
+                {{#if editMode}}
+                  <input class="input" name="latitude" value="{{location.latitude}}">
+                {{else}}
+                  <p class="title is-6">{{location.latitude}}</p>
+                {{/if}}
+
+              </div>
+            </div>
+            <div class="column">
+              <div class="box">
+                <p class="heading">Longitude</p>
+
+                {{#if editMode}}
+                  <input class="input" name="longitude" value="{{location.longitude}}">
+                {{else}}
+                  <p class="title is-6">{{location.longitude}}</p>
+                {{/if}}
+
+              </div>
             </div>
           </div>
-          <div class="column">
-            <div class="box">
-              <p class="heading">Longitude</p>
-              <p class="title is-6">{{location.longitude}}</p>
-            </div>
+
+          <div class="box">
+            <h2 class="title is-5">Description</h2>
+
+            {{#if editMode}}
+              <textarea class="textarea" name="description">{{location.description}}</textarea>
+            {{else}}
+              <p>{{location.description}}</p>
+            {{/if}}
+
           </div>
-        </div>
 
-        <div class="box">
-          <h2 class="title is-5">Description</h2>
-          <p>{{location.description}}</p>
-        </div>
-
+        {{#if editMode}}
+        </form>
+        {{/if}}
       </div>
     </div>
 
@@ -115,6 +187,7 @@
       </button>
     </form>
     {{/if}}
+
   </div>
 </section>
 
