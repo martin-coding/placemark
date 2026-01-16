@@ -14,18 +14,14 @@ describe("Location privacy", () => {
       password,
       firstName: "Test",
       lastName: "User",
-    }).then((res) => {
-      return cy.request("POST", "/api/users/authenticate", {
+    }).then((res) => cy.request("POST", "/api/users/authenticate", {
         email,
         password,
-      }).then((authRes) => {
-        return {
+      }).then((authRes) => ({
           email,
           token: authRes.body.token,
           id: res.body._id,
-        };
-      });
-    });
+        })));
   }
 
   it("User B cannot see User A private location", () => {
