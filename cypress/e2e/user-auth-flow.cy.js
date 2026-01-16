@@ -84,7 +84,7 @@ describe("User authentication flow", () => {
     cy.get("input[name=passwordConfirm]").type(password);
     cy.get("form").submit();
 
-    cy.contains("li", '"password" length must be at least 8 characters long').should("be.visible");
+    cy.contains("li", "\"password\" length must be at least 8 characters long").should("be.visible");
   });
 
   it("fails signup - password missmatch", () => {

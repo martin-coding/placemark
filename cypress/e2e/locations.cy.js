@@ -45,11 +45,11 @@ describe("Location CRUD", () => {
     cy.visit("/dashboard/new");
 
     cy.get("input[name=title]").type(location.title);
-    cy.get('select[name="category"]').select(location.category);
-    cy.get('input[name="latitude"]').type(location.latitude);
-    cy.get('input[name="longitude"]').type(location.longitude);
+    cy.get("select[name=\"category\"]").select(location.category);
+    cy.get("input[name=\"latitude\"]").type(location.latitude);
+    cy.get("input[name=\"longitude\"]").type(location.longitude);
     cy.get("textarea[name=description]").type(location.description);
-    cy.get('input[name="visibility"]').check(location.visibility);
+    cy.get("input[name=\"visibility\"]").check(location.visibility);
     cy.get("form").submit();
   });
 
@@ -71,10 +71,10 @@ describe("Location CRUD", () => {
       cy.visit(`/location/${locationId}`);
 
       // Update
-      cy.get('[data-cy="edit-location"]').click();
+      cy.get("[data-cy=\"edit-location\"]").click();
 
       // Delete
-      cy.get('[data-cy="delete-location"]').click();
+      cy.get("[data-cy=\"delete-location\"]").click();
     });
   });
 });
