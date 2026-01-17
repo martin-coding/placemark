@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
+import { IAuthIdentity } from "../../types/placemark-types.js";
 
 const { Schema } = mongoose;
 
-const authIdentitySchema = new Schema(
+const authIdentitySchema = new Schema<IAuthIdentity>(
   {
     user: {
       type: Schema.Types.ObjectId,

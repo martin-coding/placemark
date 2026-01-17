@@ -1,15 +1,17 @@
 import { db } from "../models/db.js";
+import { Request, ResponseToolkit } from "@hapi/hapi";
+import { IUser } from "../types/placemark-types.js";
 
 export const adminController = {
   index: {
-    handler: async function (request, h) {
-      const loggedInUser = request.auth.credentials;
+    handler: async function (request: Request, h: ResponseToolkit) {
+      const loggedInUser = request.auth.credentials as any;
 
       if (!loggedInUser.isAdmin) {
         return h.response("Forbidden").code(403);
       }
 
-      const users = await db.userStore.getAllUsers();
+      const users: IUser[] = await db.userStore.getAllUsers();
 
       const updatedUsers = users.map((user) => ({
         ...user,
@@ -26,7 +28,7 @@ export const adminController = {
   },
 
   deleteUser: {
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       const loggedInUser = request.auth.credentials;
 
       if (!loggedInUser.isAdmin) {

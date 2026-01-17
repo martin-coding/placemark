@@ -1,5 +1,6 @@
 import Mongoose from "mongoose";
 import { User } from "./user.js";
+import { IUser } from "../../types/placemark-types.js";
 import { AuthIdentity } from "./auth.js";
 import { Location } from "./location.js";
 
@@ -9,7 +10,7 @@ export const userMongoStore = {
     return users;
   },
 
-  async getUserById(id) {
+  async getUserById(id: string) {
     if (Mongoose.isValidObjectId(id)) {
       const user = await User.findOne({ _id: id }).lean();
       return user;
@@ -17,19 +18,19 @@ export const userMongoStore = {
     return null;
   },
 
-  async addUser(user) {
-    const newUser = new User(user);
+  async addUser(user: IUser) {
+    const newUser = new User(user) as any;
     const userObj = await newUser.save();
     const u = await this.getUserById(userObj._id);
     return u;
   },
 
-  async getUserByEmail(email) {
+  async getUserByEmail(email: string) {
     const user = await User.findOne({ email: email }).lean();
     return user;
   },
 
-  async deleteUserById(id) {
+  async deleteUserById(id: string) {
     try {
       await Location.deleteMany({
         visibility: "private",

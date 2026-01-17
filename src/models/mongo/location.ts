@@ -1,8 +1,9 @@
 import Mongoose from "mongoose";
+import { ILocation } from "../../types/placemark-types.js";
 
 const { Schema } = Mongoose;
 
-const locationSchema = new Schema({
+const locationSchema = new Schema<ILocation>({
   title: String,
   latitude: Number,
   longitude: Number,

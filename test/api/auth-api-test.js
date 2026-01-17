@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import { placemarkService } from "./placemark-service.js";
-import { decodeToken } from "../../src/api/jwt-utils.js";
+import { decodeToken } from "../../dist/api/jwt-utils.js";
 import { john, johnCredentials, testUser, testUserCredentials } from "../fixtures.js";
 
 suite("Authentication API tests", async () => {

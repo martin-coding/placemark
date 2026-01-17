@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
+import { IReview } from "../../types/placemark-types.js";
 
 const { Schema } = mongoose;
 
-const reviewSchema = new Schema(
+const reviewSchema = new Schema<IReview>(
   {
     locationid: {
       type: Schema.Types.ObjectId,

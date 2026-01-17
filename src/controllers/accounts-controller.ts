@@ -1,3 +1,5 @@
+import { Request, ResponseToolkit } from "@hapi/hapi";
+// @ts-ignore
 import bcrypt from "bcrypt";
 import { db } from "../models/db.js";
 import { UserFormSpec, UserCredentialsSpec } from "../models/joi-schemas.js";
@@ -5,13 +7,13 @@ import { UserFormSpec, UserCredentialsSpec } from "../models/joi-schemas.js";
 export const accountsController = {
   index: {
     auth: false,
-    handler: function (request, h) {
+    handler: function (request: Request, h: ResponseToolkit) {
       return h.view("main", { title: "Welcome to Placemark" });
     },
   },
   showSignup: {
     auth: false,
-    handler: function (request, h) {
+    handler: function (request: Request, h: ResponseToolkit) {
       return h.view("signup-view", { title: "Sign up for Placemark" });
     },
   },
@@ -20,12 +22,12 @@ export const accountsController = {
     validate: {
       payload: UserFormSpec,
       options: { abortEarly: false },
-      failAction: function (request, h, error) {
+      failAction: function (request: Request, h: ResponseToolkit, error: any) {
         return h.view("signup-view", { title: "Sign up error", errors: error.details }).takeover().code(400);
       },
     },
-    handler: async function (request, h) {
-      const form = request.payload;
+    handler: async function (request: Request, h: ResponseToolkit) {
+      const form = request.payload as any;
       try {
         const user = await db.userStore.addUser({
           firstName: form.firstName,
@@ -40,7 +42,7 @@ export const accountsController = {
           email: form.email,
         });
         return h.redirect("/");
-      } catch (error) {
+      } catch (error: any) {
         if (error.code === 11000) {
           return h
             .view("signup-view", { title: "Sign up error", errors: [{ message: "Email is already in use." }] })
@@ -53,7 +55,7 @@ export const accountsController = {
   },
   showLogin: {
     auth: false,
-    handler: function (request, h) {
+    handler: function (request: Request, h: ResponseToolkit) {
       return h.view("login-view", { title: "Login to Placemark" });
     },
   },
@@ -62,12 +64,12 @@ export const accountsController = {
     validate: {
       payload: UserCredentialsSpec,
       options: { abortEarly: false },
-      failAction: function (request, h, error) {
+      failAction: function (request: Request, h: ResponseToolkit, error: any) {
         return h.view("login-view", { title: "Log in error", errors: error.details }).takeover().code(400);
       },
     },
-    handler: async function (request, h) {
-      const { email, password } = request.payload;
+    handler: async function (request: Request, h: ResponseToolkit) {
+      const { email, password } = request.payload as any;
 
       const identity = await db.authStore.getLocalIdentity(email);
 
@@ -93,8 +95,8 @@ export const accountsController = {
   },
   github: {
     auth: "github",
-    handler: async function (request, h) {
-      const { profile, provider } = request.auth.credentials;
+    handler: async function (request: Request, h: ResponseToolkit) {
+      const { profile, provider } = request.auth.credentials as any;
 
       const identity = await db.authStore.getOAuthIdentity(provider, profile.id);
 
@@ -119,13 +121,13 @@ export const accountsController = {
     },
   },
   logout: {
-    handler: function (request, h) {
+    handler: function (request: Request, h: ResponseToolkit) {
       request.cookieAuth.clear();
       return h.redirect("/");
     },
   },
 
-  async validate(request, session) {
+  async validate(request: Request, session: any) {
     const user = await db.userStore.getUserById(session.id);
     if (!user) {
       return { isValid: false };

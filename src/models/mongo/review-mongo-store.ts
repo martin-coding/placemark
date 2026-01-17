@@ -1,8 +1,9 @@
 import Mongoose from "mongoose";
 import { Review } from "./review.js";
+import { IReview } from "../../types/placemark-types.js";
 
 export const reviewMongoStore = {
-  async getReviewById(id) {
+  async getReviewById(id: string) {
     if (Mongoose.isValidObjectId(id)) {
       const review = await Review.findOne({ _id: id }).lean();
       return review;
@@ -10,7 +11,7 @@ export const reviewMongoStore = {
     return null;
   },
 
-  async getReviewsFromLocation(locationId) {
+  async getReviewsFromLocation(locationId: string) {
     const reviews = await Review.find({ locationid: locationId })
       .populate({
         path: "userid",
@@ -20,11 +21,11 @@ export const reviewMongoStore = {
     return reviews;
   },
 
-  async addReview(review) {
+  async addReview(review: IReview) {
     await Review.create(review);
   },
 
-  async deleteReviewById(id) {
+  async deleteReviewById(id: string) {
     try {
       await Review.deleteOne({ _id: id });
     } catch (error) {
@@ -32,14 +33,14 @@ export const reviewMongoStore = {
     }
   },
 
-  async getUserReviewForLocation(locationId, userId) {
+  async getUserReviewForLocation(locationId: string, userId: string) {
     return Review.findOne({
       locationid: locationId,
       userid: userId,
     }).lean();
   },
 
-  async upsertReview(locationId, userId, rating, comment) {
+  async upsertReview(locationId: string, userId: string, rating: number, comment: string) {
     await Review.findOneAndUpdate({ locationid: locationId, userid: userId }, { rating, comment }, { upsert: true, new: true });
   },
 };

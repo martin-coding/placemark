@@ -1,6 +1,8 @@
 import Mongoose from "mongoose";
+import { Types } from "mongoose";
 import { Location } from "./location.js";
 import { Review } from "./review.js";
+import { ILocation, UpdateLocationDTO } from "../../types/placemark-types.js";
 
 export const locationMongoStore = {
   async getAllLocations() {
@@ -8,7 +10,7 @@ export const locationMongoStore = {
     return locations;
   },
 
-  async getLocationById(id) {
+  async getLocationById(id: Types.ObjectId) {
     if (Mongoose.isValidObjectId(id)) {
       const location = await Location.findOne({ _id: id }).lean();
       return location;
@@ -16,18 +18,19 @@ export const locationMongoStore = {
     return null;
   },
 
-  async addLocation(location) {
+  async addLocation(location: ILocation) {
     const newLocation = new Location(location);
     const locationObj = await newLocation.save();
     return this.getLocationById(locationObj._id);
   },
 
-  async getUserLocations(id, category) {
+  async getUserLocations(id: string, category: string) {
     const query = {
       $or: [{ userid: id }, { visibility: "public" }],
     };
 
     if (category) {
+      // @ts-ignore
       query.category = category;
     }
 
@@ -35,7 +38,7 @@ export const locationMongoStore = {
     return locations;
   },
 
-  async deleteLocationById(id) {
+  async deleteLocationById(id: string) {
     try {
       await Review.deleteMany({ locationid: id });
       await Location.deleteOne({ _id: id });
@@ -48,28 +51,23 @@ export const locationMongoStore = {
     await Location.deleteMany({});
   },
 
-  async editLocation(updatedLocation) {
-    const { _id, title, category, visibility, latitude, longitude, description } = updatedLocation;
-
-    if (!_id) throw new Error("Location _id is required");
-
-    const updateData = {};
-    if (title !== undefined) updateData.title = title;
-    if (category !== undefined) updateData.category = category;
-    if (visibility !== undefined) updateData.visibility = visibility;
-    if (latitude !== undefined) updateData.latitude = latitude;
-    if (longitude !== undefined) updateData.longitude = longitude;
-    if (description !== undefined) updateData.description = description;
-
-    const updated = await Location.findByIdAndUpdate(_id, updateData, { new: true, runValidators: true });
+  async editLocation({ _id, ...updateData }: UpdateLocationDTO) {
+    const updated = await Location.findByIdAndUpdate(
+      _id,
+      updateData,
+      { new: true, runValidators: true }
+    );
 
     if (!updated) throw new Error("Location not found");
 
     return updated;
   },
 
-  async updateLocation(updatedLocation) {
+  async updateLocation(updatedLocation: ILocation) {
     const location = await Location.findOne({ _id: updatedLocation._id });
+
+    if (!location) throw new Error("Location not found");
+
     location.img = updatedLocation.img;
     await location.save();
   },

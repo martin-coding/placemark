@@ -2,13 +2,14 @@ import Boom from "@hapi/boom";
 import { IdSpec, LocationArraySpec, LocationSpec, LocationSpecPlus } from "../models/joi-schemas.js";
 import { db } from "../models/db.js";
 import { validationError } from "./logger.js";
+import { Request, ResponseToolkit } from "@hapi/hapi";
 
 export const locationApi = {
   find: {
     auth: {
       strategy: "jwt",
     },
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       try {
         const locations = await db.locationStore.getAllLocations();
         return locations;
@@ -26,7 +27,7 @@ export const locationApi = {
     auth: {
       strategy: "jwt",
     },
-    async handler(request) {
+    async handler(request: Request) {
       try {
         const location = await db.locationStore.getLocationById(request.params.id);
         if (!location) {
@@ -48,7 +49,7 @@ export const locationApi = {
     auth: {
       strategy: "jwt",
     },
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       try {
         const location = request.payload;
         const newLocation = await db.locationStore.addLocation(location);
@@ -71,7 +72,7 @@ export const locationApi = {
     auth: {
       strategy: "jwt",
     },
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       try {
         const location = await db.locationStore.getLocationById(request.params.id);
         if (!location) {
@@ -92,7 +93,7 @@ export const locationApi = {
     auth: {
       strategy: "jwt",
     },
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       try {
         await db.locationStore.deleteAllLocations();
         return h.response().code(204);
