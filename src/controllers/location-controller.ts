@@ -1,6 +1,7 @@
 import { db } from "../models/db.js";
 import { imageStore } from "../models/image-store.js";
 import { Request, ResponseToolkit } from "@hapi/hapi";
+import { getWeather } from "../services/weather-service";
 
 export const locationController = {
   index: {
@@ -27,9 +28,20 @@ export const locationController = {
         userReview = await db.reviewStore.getUserReviewForLocation(location._id, loggedInUser._id);
       }
 
+      let weather = null;
+
+      if (location.latitude && location.longitude) {
+        try {
+          weather = await getWeather(location.latitude, location.longitude);
+        } catch (e) {
+          console.error("Weather API failed", e);
+        }
+      }
+
       const viewData = {
         title: "Location",
         location: location,
+        weather: weather, 
         user: loggedInUser,
         reviews: reviews,
         userReview,
