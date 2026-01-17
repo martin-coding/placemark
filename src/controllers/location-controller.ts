@@ -1,7 +1,7 @@
 import { db } from "../models/db.js";
 import { imageStore } from "../models/image-store.js";
 import { Request, ResponseToolkit } from "@hapi/hapi";
-import { getWeather } from "../services/weather-service";
+import { getWeather } from "../services/weather-service.js";
 
 export const locationController = {
   index: {
