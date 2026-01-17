@@ -11,7 +11,7 @@ export interface IUser {
   createdAt: Date;
   updatedAt: Date;
   _id: Types.ObjectId;
-};
+}
 
 export interface IAuthIdentity {
   user: Types.ObjectId;
@@ -22,7 +22,7 @@ export interface IAuthIdentity {
   createdAt: Date;
   updatedAt: Date;
   _id: Types.ObjectId;
-};
+}
 
 export interface ILocation {
   title?: string;
@@ -60,8 +60,8 @@ export interface IReview {
 }
 
 export type Db = {
-  userStore: any,
-  locationStore: any,
-  authStore: any,
-  reviewStore: any,
+  userStore: any;
+  locationStore: any;
+  authStore: any;
+  reviewStore: any;
 };

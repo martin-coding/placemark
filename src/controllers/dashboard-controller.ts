@@ -33,7 +33,7 @@ export const dashboardController = {
       const payload = request.payload as CreateLocationDTO;
       const newLocation: Omit<ILocation, "_id"> = {
         userid: loggedInUser._id,
-        ...payload
+        ...payload,
       };
 
       await db.locationStore.addLocation(newLocation);

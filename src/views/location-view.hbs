@@ -118,6 +118,28 @@
         <form id="edit-location-form" action="/location/{{location._id}}/update" method="POST">
         {{/if}}
 
+           <div class="box">
+              <h2 class="title is-5">Weather</h2>
+
+              {{#if weather}}
+                <div class="is-flex is-align-items-center">
+                  <i class="fa-solid {{weather.icon}} mr-3" style="font-size: 2rem;"></i>
+
+                  <div>
+                    <div class="has-text-weight-semibold">
+                      {{weather.temperature}}°C
+                    </div>
+                    <div class="is-size-7 has-text-grey">
+                      Wind {{weather.windspeed}} km/h
+                    </div>
+                  </div>
+                </div>
+              {{else}}
+                <p>Weather unavailable</p>
+              {{/if}}
+
+            </div>
+
           <div class="columns">
             <div class="column">
               <div class="box">
