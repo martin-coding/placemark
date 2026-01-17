@@ -6,15 +6,16 @@ export const locationController = {
     handler: async function (request, h) {
       const loggedInUser = request.auth.credentials;
       const location = await db.locationStore.getLocationById(request.params.id);
+      const editMode = request.query.edit === "true";
+
+      if (!location) {
+        return h.view("404", { title: "Not found", user: loggedInUser }).code(404);
+      }
       const reviews = await db.reviewStore.getReviewsFromLocation(location._id);
       const canEdit = location.userid?.toString() === loggedInUser._id.toString() || loggedInUser.isAdmin;
-      const editMode = request.query.edit === "true";
 
       if (!canEdit && editMode) {
         return h.redirect(`/location/${location._id}`);
-      }
-      if (!location) {
-        return h.view("404", { title: "Not found", user: loggedInUser }).code(404);
       }
       if (location.visibility === "private" && loggedInUser._id.toString() !== location.userid?.toString()) {
         return h.view("404", { title: "Not found", user: loggedInUser }).code(404);

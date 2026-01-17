@@ -2,9 +2,11 @@ describe("User authentication flow", () => {
   let user;
 
   beforeEach(() => {
-    cy.task("db:reset");
     cy.fixture("user").then((u) => {
-      user = u;
+      user = {
+        ...u,
+        email: `test_${Date.now()}@example.com`,
+      };
     });
   });
 
@@ -54,5 +56,48 @@ describe("User authentication flow", () => {
     cy.get("#logout").click();
     cy.getCookie("placemark").should("not.exist");
     cy.location("pathname").should("eq", "/");
+  });
+
+  it("fails signup - email in use", () => {
+    cy.request("POST", "/register", user);
+
+    cy.visit("/signup");
+
+    cy.get("input[name=firstName]").type(user.firstName);
+    cy.get("input[name=lastName]").type(user.lastName);
+    cy.get("input[name=email]").type(user.email);
+    cy.get("input[name=password]").type(user.password);
+    cy.get("input[name=passwordConfirm]").type(user.passwordConfirm);
+    cy.get("form").submit();
+
+    cy.contains("li", "Email is already in use.").should("be.visible");
+  });
+
+  it("fails signup - password too short", () => {
+    const password = "short";
+    cy.visit("/signup");
+
+    cy.get("input[name=firstName]").type(user.firstName);
+    cy.get("input[name=lastName]").type(user.lastName);
+    cy.get("input[name=email]").type(user.email);
+    cy.get("input[name=password]").type(password);
+    cy.get("input[name=passwordConfirm]").type(password);
+    cy.get("form").submit();
+
+    cy.contains("li", "\"password\" length must be at least 8 characters long").should("be.visible");
+  });
+
+  it("fails signup - password missmatch", () => {
+    const password = "incorrect";
+    cy.visit("/signup");
+
+    cy.get("input[name=firstName]").type(user.firstName);
+    cy.get("input[name=lastName]").type(user.lastName);
+    cy.get("input[name=email]").type(user.email);
+    cy.get("input[name=password]").type(user.password);
+    cy.get("input[name=passwordConfirm]").type(password);
+    cy.get("form").submit();
+
+    cy.contains("li", "Passwords do not match").should("be.visible");
   });
 });

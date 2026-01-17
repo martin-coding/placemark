@@ -62,7 +62,7 @@
               <span>Save</span>
             </button>
           {{else}}
-            <a href="/location/{{location._id}}?edit=true" class="button is-warning">
+            <a href="/location/{{location._id}}?edit=true" class="button is-warning" data-cy="edit-location">
               <span class="icon"><i class="far fa-edit"></i></span>
               <span>Edit</span>
             </a>
@@ -179,7 +179,8 @@
       <button
         type="submit"
         class="button is-danger is-light"
-        onclick="return confirm('Are you sure you want to delete this location? This action cannot be undone.');">
+        onclick="return confirm('Are you sure you want to delete this location? This action cannot be undone.');"
+        data-cy="delete-location">
         <span class="icon">
           <i class="fas fa-trash"></i>
         </span>
