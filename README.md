@@ -43,7 +43,7 @@ npm install --force
 ```
 
 > [!IMPORTANT]  
-> Force is needed because of hapi-swagger
+> Force is needed because of hapi-swagger depending on joi@"17.x"
 
 3. copy `.env_example` to `.env` and set the variables
 4. Start the application
