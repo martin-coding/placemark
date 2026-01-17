@@ -162,6 +162,8 @@
       </div>
     </div>
 
+    {{#if (eq location.visibility "public") }}
+
     {{> review-form}}
 
     <div class="box">
@@ -173,6 +175,8 @@
         <p class="has-text-grey">No reviews yet. Be the first to review this place.</p>
       {{/if}}
     </div>
+
+    {{/if}}
 
     {{#if canEdit}}
     <form action="/dashboard/deletelocation/{{location._id}}" method="POST">
@@ -191,6 +195,16 @@
 
   </div>
 </section>
+
+<footer class="footer">
+  <div class="content has-text-centered">
+    <p>
+      <strong>Placemark</strong> by <a href="https://github.com/martin-coding/placemark">martin-coding</a>.
+      <br>
+      © 2026 Placemark
+    </p>
+  </div>
+</footer>
 
 <script>
   const fileInput = document.querySelector(".file-input");

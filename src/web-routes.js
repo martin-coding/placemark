@@ -21,6 +21,7 @@ export const webRoutes = [
   { method: "POST", path: "/location/{id}/update", config: locationController.update },
   { method: "POST", path: "/location/{id}/uploadimage", config: locationController.uploadImage },
   { method: "POST", path: "/location/{id}/review", config: locationController.review },
+  { method: "POST", path: "/location/{locationId}/deletereview/{reviewId}", config: locationController.deleteReview },
 
   { method: "GET", path: "/admin", config: adminController.index },
   { method: "GET", path: "/admin/deleteuser/{id}", config: adminController.deleteUser },
