@@ -22,7 +22,7 @@
         <textarea class="textarea" name="comment">{{userReview.comment}}</textarea>
     </div>
 
-    <button class="button is-success">💾 Update Review</button>
+    <button class="button is-success" data-cy="update-review">💾 Update Review</button>
     </form>
 </div>
 {{else}}
@@ -49,7 +49,7 @@
         <textarea class="textarea" name="comment" placeholder="Write your review..."></textarea>
     </div>
 
-    <button class="button is-primary">Submit Review</button>
+    <button class="button is-primary" data-cy="review">Submit Review</button>
     </form>
 </div>
 {{/if}}
