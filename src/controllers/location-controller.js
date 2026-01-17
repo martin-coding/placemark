@@ -87,4 +87,15 @@ export const locationController = {
       return h.redirect(`/location/${request.params.id}`);
     },
   },
+  deleteReview: {
+    handler: async function (request, h) {
+      const loggedInUser = request.auth.credentials;
+      const { locationId, reviewId } = request.params;
+      const review = await db.reviewStore.getReviewById(reviewId);
+      if (review.userid.toString() === loggedInUser._id.toString()) {
+        await db.reviewStore.deleteReviewById(reviewId);
+      }
+      return h.redirect(`/location/${locationId}`);
+    },
+  },
 };

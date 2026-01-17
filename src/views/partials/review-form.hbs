@@ -2,12 +2,10 @@
 <div class="box mt-5 has-background-info-light">
     <h2 class="title is-5">Your Review</h2>
 
-    <form action="/location/{{location._id}}/review" method="POST">
-
     <div class="field">
         <label class="label">Rating</label>
         <div class="select">
-        <select name="rating">
+        <select name="rating" form="update-review-form">
             <option value="5" {{#if (eq userReview.rating 5)}}selected{{/if}}>⭐⭐⭐⭐⭐</option>
             <option value="4" {{#if (eq userReview.rating 4)}}selected{{/if}}>⭐⭐⭐⭐</option>
             <option value="3" {{#if (eq userReview.rating 3)}}selected{{/if}}>⭐⭐⭐</option>
@@ -19,11 +17,26 @@
 
     <div class="field">
         <label class="label">Comment</label>
-        <textarea class="textarea" name="comment">{{userReview.comment}}</textarea>
+        <textarea class="textarea" name="comment" form="update-review-form">{{userReview.comment}}</textarea>
     </div>
 
-    <button class="button is-success" data-cy="update-review">💾 Update Review</button>
-    </form>
+    <div class="buttons">
+        <form action="/location/{{location._id}}/review" method="POST" id="update-review-form">
+            <button class="button is-success" data-cy="update-review">💾 Update Review</button>
+        </form>
+        <form action="/location/{{location._id}}/deletereview/{{userReview._id}}" method="POST">
+            <button
+                type="submit"
+                class="button is-danger is-light ml-4"
+                onclick="return confirm('Are you sure you want to delete this review? This action cannot be undone.');"
+                data-cy="delete-review">
+                <span class="icon">
+                <i class="fas fa-trash"></i>
+                </span>
+                <span>Delete Review</span>
+            </button>
+        </form>
+    </div>
 </div>
 {{else}}
 <div class="box mt-5">

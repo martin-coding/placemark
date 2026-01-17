@@ -8,20 +8,26 @@ describe("Location Reviews", () => {
   function createUser() {
     const email = `test_${Date.now()}_${Math.random()}@example.com`;
 
-    return cy.request("POST", "/api/users", {
-      email,
-      password,
-      firstName: "Test",
-      lastName: "User",
-    }).then((res) => cy.request("POST", "/api/users/authenticate", {
+    return cy
+      .request("POST", "/api/users", {
         email,
         password,
-      }).then((authRes) => ({
-          email,
-          password,
-          id: res.body._id,
-          token: authRes.body.token,
-        })));
+        firstName: "Test",
+        lastName: "User",
+      })
+      .then((res) =>
+        cy
+          .request("POST", "/api/users/authenticate", {
+            email,
+            password,
+          })
+          .then((authRes) => ({
+            email,
+            password,
+            id: res.body._id,
+            token: authRes.body.token,
+          }))
+      );
   }
 
   function loginSession(user) {
@@ -32,31 +38,34 @@ describe("Location Reviews", () => {
   }
 
   before(() => {
-    createUser().then((u) => {
-      userA = u;
+    createUser()
+      .then((u) => {
+        userA = u;
 
-      return cy.request({
-        method: "POST",
-        url: "/api/locations",
-        headers: {
-          Authorization: `Bearer ${userA.token}`,
-        },
-        body: {
-          title: "Review Test Location",
-          category: "beach",
-          latitude: 10,
-          longitude: 10,
-          description: "Review test",
-          visibility: "public",
-        },
+        return cy.request({
+          method: "POST",
+          url: "/api/locations",
+          headers: {
+            Authorization: `Bearer ${userA.token}`,
+          },
+          body: {
+            title: "Review Test Location",
+            category: "beach",
+            latitude: 10,
+            longitude: 10,
+            description: "Review test",
+            visibility: "public",
+          },
+        });
+      })
+      .then((res) => {
+        locationId = res.body._id;
+
+        return createUser();
+      })
+      .then((u) => {
+        userB = u;
       });
-    }).then((res) => {
-      locationId = res.body._id;
-
-      return createUser();
-    }).then((u) => {
-      userB = u;
-    });
   });
 
   it("User B can create and edit review; others can see it", () => {
@@ -87,5 +96,14 @@ describe("Location Reviews", () => {
     cy.visit(`/location/${locationId}`);
 
     cy.contains("It was amazing!");
+
+    // User B: can delete own review
+    loginSession(userB);
+
+    cy.visit(`/location/${locationId}`);
+    cy.contains("Your Review");
+
+    cy.get("[data-cy=\"delete-review\"]").click();
+    cy.contains("Add a Review");
   });
 });
