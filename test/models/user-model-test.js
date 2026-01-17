@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { EventEmitter } from "events";
 import { before } from "mocha";
-import { db } from "../../src/models/db.js";
+import { db, connectDb } from "../../dist/models/db.js";
 import { john, testUsers } from "../fixtures.js";
 import { assertSubset } from "../test-utils.js";
 
@@ -9,7 +9,7 @@ EventEmitter.setMaxListeners(25);
 
 suite("User Model tests", () => {
   before(async () => {
-    db.init("mongo");
+    connectDb("mongo");
   });
 
   setup(async () => {

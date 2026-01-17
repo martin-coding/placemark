@@ -13,16 +13,21 @@
   "license": "ISC",
   "author": "martin-coding",
   "type": "module",
-  "main": "src/server.js",
+  "main": "dist/server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "./node_modules/.bin/nodemon src/server.js --ignore 'src/models/json/*.json'",
+    "build": "tsc -p tsconfig.json && mkdir -p dist/views dist/public && cp -R src/views/* dist/views/ && cp -R public/* dist/public/",
+    "start": "npm run build && node dist/server.js",
+    "dev": "tsx watch src/server.ts",
     "lint": "./node_modules/.bin/eslint . --ext .js",
     "test": "./node_modules/mocha/bin/_mocha --ui tdd test/**/*.js -exit",
     "testmodels": "./node_modules/mocha/bin/_mocha --ui tdd test/models/**/*.js -exit",
     "testapi": "./node_modules/mocha/bin/_mocha --ui tdd test/api/**/*.js -exit"
   },
   "devDependencies": {
+    "@types/hapi__cookie": "^12.0.5",
+    "@types/node": "^24.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
     "axios": "^1.13.2",
     "chai": "^6.2.1",
     "cypress": "^15.8.2",
@@ -32,7 +37,9 @@
     "eslint-plugin-import": "^2.32.0",
     "mocha": "^11.7.5",
     "nodemon": "^3.1.11",
-    "prettier": "^3.7.2"
+    "prettier": "^3.7.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "@hapi/bell": "^13.1.0",

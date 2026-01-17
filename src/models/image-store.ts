@@ -9,6 +9,7 @@ const credentials = {
   api_key: process.env.CLOUDINARY_KEY,
   api_secret: process.env.CLOUDINARY_SECRET,
 };
+// @ts-ignore
 cloudinary.config(credentials);
 
 export const imageStore = {
@@ -17,12 +18,14 @@ export const imageStore = {
     return result.resources;
   },
 
+  // @ts-ignore
   uploadImage: async function (imagefile) {
     writeFileSync("./public/temp.img", imagefile);
     const response = await cloudinary.v2.uploader.upload("./public/temp.img");
     return response.url;
   },
 
+  // @ts-ignore
   deleteImage: async function (img) {
     await cloudinary.v2.uploader.destroy(img, {});
   },

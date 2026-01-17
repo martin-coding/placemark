@@ -1,9 +1,11 @@
 import { db } from "../models/db.js";
 import { LocationSpec } from "../models/joi-schemas.js";
+import { Request, ResponseToolkit } from "@hapi/hapi";
+import { ILocation, CreateLocationDTO, IUser, IAuthIdentity } from "../types/placemark-types.js";
 
 export const dashboardController = {
   index: {
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       const loggedInUser = request.auth.credentials;
       const { category } = request.query;
       const locations = await db.locationStore.getUserLocations(loggedInUser._id, category);
@@ -20,31 +22,28 @@ export const dashboardController = {
     validate: {
       payload: LocationSpec,
       options: { abortEarly: false },
-      failAction: async function (request, h, error) {
+      failAction: async function (request: Request, h: ResponseToolkit, error: any) {
         const loggedInUser = request.auth.credentials;
         const locations = await db.locationStore.getUserLocations(loggedInUser._id);
         return h.view("location-form", { title: "Add Location error", locations: locations, errors: error.details }).takeover().code(400);
       },
     },
-    handler: async function (request, h) {
-      const loggedInUser = request.auth.credentials;
-      const newLocation = {
+    handler: async function (request: Request, h: ResponseToolkit) {
+      const loggedInUser = request.auth.credentials as any;
+      const payload = request.payload as CreateLocationDTO;
+      const newLocation: Omit<ILocation, "_id"> = {
         userid: loggedInUser._id,
-        title: request.payload.title,
-        latitude: request.payload.latitude,
-        longitude: request.payload.longitude,
-        description: request.payload.description,
-        category: request.payload.category,
-        visibility: request.payload.visibility,
+        ...payload
       };
+
       await db.locationStore.addLocation(newLocation);
       return h.redirect("/dashboard");
     },
   },
   deleteLocation: {
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       const location = await db.locationStore.getLocationById(request.params.id);
-      const loggedInUser = request.auth.credentials;
+      const loggedInUser = request.auth.credentials as any;
       if (location.userid?.toString() !== loggedInUser._id.toString() && !loggedInUser.isAdmin) {
         return h.response("403 Forbidden").code(403);
       }
@@ -53,7 +52,7 @@ export const dashboardController = {
     },
   },
   new: {
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       const loggedInUser = request.auth.credentials;
       const { lat, lng } = request.query;
 

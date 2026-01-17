@@ -1,16 +1,18 @@
 import Boom from "@hapi/boom";
+// @ts-ignore
 import bcrypt from "bcrypt";
 import { db } from "../models/db.js";
 import { UserSpec, UserSpecPlus, UserCredentialsSpec, IdSpec, UserArray, JwtAuth } from "../models/joi-schemas.js";
 import { validationError } from "./logger.js";
 import { createToken } from "./jwt-utils.js";
+import { Request, ResponseToolkit } from "@hapi/hapi";
 
 export const userApi = {
   find: {
     auth: {
       strategy: "jwt",
     },
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       try {
         const users = await db.userStore.getAllUsers();
         return users;
@@ -28,7 +30,7 @@ export const userApi = {
     auth: {
       strategy: "jwt",
     },
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       try {
         const user = await db.userStore.getUserById(request.params.id);
         if (!user) {
@@ -48,9 +50,9 @@ export const userApi = {
 
   create: {
     auth: false,
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       try {
-        const data = request.payload;
+        const data = request.payload as any;
         const user = await db.userStore.addUser({
           firstName: data.firstName,
           lastName: data.lastName,
@@ -67,7 +69,7 @@ export const userApi = {
           email: data.email,
         });
         return h.response(user).code(201);
-      } catch (err) {
+      } catch (err: any) {
         if (err.code === 11000) {
           return Boom.conflict("Email already in use");
         }
@@ -85,7 +87,7 @@ export const userApi = {
     auth: {
       strategy: "jwt",
     },
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       try {
         await db.userStore.deleteAll();
         return h.response().code(204);
@@ -102,7 +104,7 @@ export const userApi = {
     auth: {
       strategy: "jwt",
     },
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       try {
         const user = await db.userStore.getUserById(request.params.id);
         if (!user) {
@@ -122,14 +124,15 @@ export const userApi = {
 
   authenticate: {
     auth: false,
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       try {
-        const user = await db.userStore.getUserByEmail(request.payload.email);
-        const identity = await db.authStore.getLocalIdentity(request.payload.email);
+        const { email, password } = request.payload as any;
+        const user = await db.userStore.getUserByEmail(email);
+        const identity = await db.authStore.getLocalIdentity(email);
         if (!user) {
           return Boom.unauthorized("User not found");
         }
-        const valid = await bcrypt.compare(request.payload.password, identity.passwordHash);
+        const valid = await bcrypt.compare(password, identity.passwordHash);
         if (!valid) {
           return Boom.unauthorized("Invalid password");
         }

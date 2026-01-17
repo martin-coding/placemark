@@ -1,10 +1,11 @@
 import { db } from "../models/db.js";
 import { imageStore } from "../models/image-store.js";
+import { Request, ResponseToolkit } from "@hapi/hapi";
 
 export const locationController = {
   index: {
-    handler: async function (request, h) {
-      const loggedInUser = request.auth.credentials;
+    handler: async function (request: Request, h: ResponseToolkit) {
+      const loggedInUser = request.auth.credentials as any;
       const location = await db.locationStore.getLocationById(request.params.id);
       const editMode = request.query.edit === "true";
 
@@ -39,11 +40,11 @@ export const locationController = {
     },
   },
   update: {
-    handler: async function (request, h) {
-      const loggedInUser = request.auth.credentials;
+    handler: async function (request: Request, h: ResponseToolkit) {
+      const loggedInUser = request.auth.credentials as any;
       const location = await db.locationStore.getLocationById(request.params.id);
       const canEdit = location.userid?.toString() === loggedInUser._id.toString() || loggedInUser.isAdmin;
-      const newLocationData = request.payload;
+      const newLocationData = request.payload as any;
       newLocationData._id = location._id;
       if (canEdit) {
         db.locationStore.editLocation(newLocationData);
@@ -52,16 +53,17 @@ export const locationController = {
     },
   },
   uploadImage: {
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       try {
-        const loggedInUser = request.auth.credentials;
+        const loggedInUser = request.auth.credentials as any;
         const location = await db.locationStore.getLocationById(request.params.id);
-        const file = request.payload.imagefile;
+        const payload = request.payload as any;
+        const file = payload.imagefile;
         if (location.userid?.toString() !== loggedInUser._id.toString() && !loggedInUser.isAdmin) {
           return h.redirect(`/location/${location._id}`);
         }
         if (Object.keys(file).length > 0) {
-          const url = await imageStore.uploadImage(request.payload.imagefile);
+          const url = await imageStore.uploadImage(file);
           location.img = url;
           await db.locationStore.updateLocation(location);
         }
@@ -79,17 +81,17 @@ export const locationController = {
     },
   },
   review: {
-    handler: async function (request, h) {
+    handler: async function (request: Request, h: ResponseToolkit) {
       const loggedInUser = request.auth.credentials;
       const location = await db.locationStore.getLocationById(request.params.id);
-      const { rating, comment } = request.payload;
+      const { rating, comment } = request.payload as any;
       await db.reviewStore.upsertReview(location._id, loggedInUser._id, rating, comment);
       return h.redirect(`/location/${request.params.id}`);
     },
   },
   deleteReview: {
-    handler: async function (request, h) {
-      const loggedInUser = request.auth.credentials;
+    handler: async function (request: Request, h: ResponseToolkit) {
+      const loggedInUser = request.auth.credentials as any;
       const { locationId, reviewId } = request.params;
       const review = await db.reviewStore.getReviewById(reviewId);
       if (review.userid.toString() === loggedInUser._id.toString()) {

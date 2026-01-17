@@ -1,8 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
+import { IUser } from "../../types/placemark-types.js";
 
-const { Schema } = mongoose;
-
-const userSchema = new Schema(
+const userSchema = new Schema<IUser>(
   {
     firstName: String,
     lastName: String,
@@ -28,4 +27,4 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-export const User = mongoose.model("User", userSchema);
+export const User = model("User", userSchema);

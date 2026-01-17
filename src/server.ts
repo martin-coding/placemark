@@ -8,12 +8,12 @@ import dotenv from "dotenv";
 import path from "path";
 import Joi from "joi";
 import HapiSwagger from "hapi-swagger";
-import jwt from "hapi-auth-jwt2";
+import * as jwt from "hapi-auth-jwt2";
 import { fileURLToPath } from "url";
 import { validate } from "./api/jwt-utils.js";
 import { accountsController } from "./controllers/accounts-controller.js";
 import { webRoutes } from "./web-routes.js";
-import { db } from "./models/db.js";
+import { connectDb } from "./models/db.js";
 import { apiRoutes } from "./api-routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -146,7 +146,7 @@ async function init() {
     location: uri,
   });
 
-  db.init("mongo");
+  connectDb("mongo");
   server.route(webRoutes);
   server.route(apiRoutes);
   server.route({
