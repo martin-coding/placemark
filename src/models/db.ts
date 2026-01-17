@@ -14,4 +14,4 @@ export function connectDb(dbType: string) {
       connectMongo(db);
       break;
   }
-};
+}

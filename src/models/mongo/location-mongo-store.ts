@@ -52,11 +52,7 @@ export const locationMongoStore = {
   },
 
   async editLocation({ _id, ...updateData }: UpdateLocationDTO) {
-    const updated = await Location.findByIdAndUpdate(
-      _id,
-      updateData,
-      { new: true, runValidators: true }
-    );
+    const updated = await Location.findByIdAndUpdate(_id, updateData, { new: true, runValidators: true });
 
     if (!updated) throw new Error("Location not found");
 

@@ -35,7 +35,7 @@ export const authMongoStore = {
     auth.provider = "local";
 
     const newAuth = new AuthIdentity(auth);
-    const authObj = await newAuth.save() as any;
+    const authObj = (await newAuth.save()) as any;
     const a = await this.getAuthById(authObj._id);
     return a;
   },

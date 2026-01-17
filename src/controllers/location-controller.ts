@@ -41,7 +41,7 @@ export const locationController = {
       const viewData = {
         title: "Location",
         location: location,
-        weather: weather, 
+        weather: weather,
         user: loggedInUser,
         reviews: reviews,
         userReview,
