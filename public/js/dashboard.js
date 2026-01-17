@@ -17,15 +17,23 @@ const detailMap = L.map("detail-map", {
   keyboard: false,
 });
 
-const terrain = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "© OpenStreetMap contributors" });
+const terrainMain = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "© OpenStreetMap contributors" });
 
-const satellite = L.tileLayer("https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}", {
-  subdomains: ["mt0", "mt1", "mt2", "mt3"],
-  attribution: "© Google",
+const topoMain = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
+  maxZoom: 17,
+  attribution: "© OpenTopoMap",
 });
 
-terrain.addTo(map);
-satellite.addTo(detailMap);
+const satelliteMain = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+  attribution: "© Esri",
+});
+
+const satelliteDetail = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+  attribution: "© Esri",
+});
+
+terrainMain.addTo(map);
+satelliteDetail.addTo(detailMap);
 
 const privateIcon = L.icon({
   iconUrl: "/images/marker-private.png",
@@ -75,7 +83,7 @@ function popupHtml(marker) {
 }
 
 function showInDetailMap(lat, lng) {
-  const zoomLevel = 16; // nice close satellite zoom
+  const zoomLevel = 16;
 
   detailMap.setView([lat, lng], zoomLevel, {
     animate: true,
@@ -144,8 +152,9 @@ if (bounds.length) {
 }
 
 const baseMaps = {
-  Terrain: terrain,
-  Satellite: satellite,
+  Terrain: terrainMain,
+  Satellite: satelliteMain,
+  Topo: topoMain,
 };
 
 const overlayMaps = {
